@@ -1,6 +1,8 @@
 # RTK1010Board
 Arduino Compatible RTK1010 Board/PCB
 
+! Design not finished yet !
+
 Feature:
 
 * Arduino compatibe form factor
