@@ -62,7 +62,9 @@
         "courtyards_overlap|191562501|101286606|c33a1c40-6151-4016-bb1f-2bbc4c34248a|369bbf0c-68c2-4cab-9b93-0592a984e902",
         "courtyards_overlap|191567130|103204999|4915862a-1906-4c03-8295-80cf89a77a84|369bbf0c-68c2-4cab-9b93-0592a984e902",
         "courtyards_overlap|195322499|103171858|369bbf0c-68c2-4cab-9b93-0592a984e902|17ba1b59-bb0d-404b-83f3-baf14ae8f984",
+        "courtyards_overlap|200310771|105385044|2055d59b-a74c-4a61-9230-8b83308e360a|4e676c6e-91f2-4d6a-93c2-794e12fc1e2c",
         "courtyards_overlap|208039999|121859999|4e676c6e-91f2-4d6a-93c2-794e12fc1e2c|8eecd6e8-70e0-40be-86b8-bf6c38cc40dc",
+        "courtyards_overlap|223298001|101766154|6c20d71f-2141-44ac-9590-4a23985fcb0b|4e676c6e-91f2-4d6a-93c2-794e12fc1e2c",
         "silk_over_copper|223553866|73645866|4669e56d-ba7a-401b-a915-1dfd6c3cc0ea|24df80c7-c63b-4267-8f24-fda34a7c2f95",
         "silk_over_copper|225004500|75169478|132a82af-c05e-4b12-90af-910507c2ca6a|99aa6317-f01f-44d2-9417-10b74e282a70",
         "silk_over_copper|225050691|86318691|132a82af-c05e-4b12-90af-910507c2ca6a|4eb7d33a-7622-4ae1-8018-bf5f09b8adff",
@@ -451,7 +453,7 @@
       "workbook_filename": ""
     },
     "page_layout_descr_file": "",
-    "plot_directory": "images/",
+    "plot_directory": "",
     "spice_adjust_passive_values": false,
     "spice_external_command": "spice \"%I\"",
     "subpart_first_id": 65,
