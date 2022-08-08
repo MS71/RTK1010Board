@@ -14,6 +14,8 @@ Feature:
 * optional power via USB
 * optional backup battery
 
+[Schematic](RTK1010Board.pdf)
+
 ![alt text](images/RTK1010Board.svg)
 ![alt text](images/RTK1010Board_3D_F.png)
 ![alt text](images/RTK1010Board_3D_B.png)
