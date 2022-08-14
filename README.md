@@ -13,6 +13,7 @@ Feature:
 * optional ESP32-S2 for operating as base station
 * optional power via USB
 * optional backup battery
+* optional BNO055 IMU
 
 [Schematic](RTK1010Board.pdf)
 
