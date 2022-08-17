@@ -21,9 +21,15 @@ A.) Minimum RTK-1010 receiver with arduino form factor.
 * just RTK-1010 to RX/TX arduino pin
 * SMA or IPEX connected
 * LNA power
+* optional backup bat for RTK-1010
+* optional LNA LDO
 
 B.) Minimum USB powered RTK base station with RTK-1010, ESP32-S2.  
 * RTK <=> TCP bridge
+* SMA or IPEX connected
+* LNA power
+* optional backup bat for RTK-1010
+* optional LNA LDO
 
 C.) Mowgli HEAD with RTK-1010, ESP32-S2 and BNO055 IMU (todo)
 * running microROS
