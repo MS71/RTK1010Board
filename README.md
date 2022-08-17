@@ -26,6 +26,7 @@ A.) Minimum RTK-1010 receiver with arduino form factor.
 
 B.) Minimum USB powered RTK base station with RTK-1010, ESP32-S2.  
 * RTK <=> TCP bridge
+* powered by USB
 * SMA or IPEX connected
 * LNA power
 * optional backup bat for RTK-1010
