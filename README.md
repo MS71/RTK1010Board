@@ -20,7 +20,7 @@ Use Cases:
 A.) Minimum RTK-1010 receiver with arduino form factor. 
 * just RTK-1010 to RX/TX arduino pin
 * SMA or IPEX connected
-* LNA power
+* LNA power by rtk-1010
 * optional backup bat for RTK-1010
 * optional LNA LDO
 
