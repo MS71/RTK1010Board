@@ -44,3 +44,5 @@ C.) Mowgli HEAD with RTK-1010, ESP32-S2 and BNO055 IMU (todo)
 ![alt text](RTK1010Board.svg)
 ![alt text](images/RTK1010Board_3D_F.png)
 ![alt text](images/RTK1010Board_3D_B.png)
+
+[iBOM](bom/ibom.html)
