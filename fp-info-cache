@@ -1,1163 +1,1492 @@
-274848026559569
-MountingHole
-MountingHole_2.1mm
-Mounting Hole 2.1mm, no annular
-mounting hole 2.1mm no annular
+354111319100374
+footprints
+AMPMODU-02X05-0.05in-MECHHOLES
+Through hole pin header
+pin header
 0
+10
+10
+footprints
+AMPMODU-02X05-0.05in-NOHOLES
+Through hole pin header
+pin header
 0
+10
+10
+footprints
+AMPMODU-FEMALE-02X05-0.05in
+Through hole pin header
+pin header
 0
-MountingHole
-MountingHole_2.2mm_M2
-Mounting Hole 2.2mm, no annular, M2
-mounting hole 2.2mm no annular m2
+12
+12
+footprints
+AMPMODU-FEMALE-02X05-0.05in-MECHHOLES
+Through hole pin header
+pin header
 0
+10
+10
+footprints
+AMPMODU-FEMALE-02X05-0.05in-NOHOLES
+Through hole pin header
+pin header
 0
+10
+10
+footprints
+AMPMODU-MALE-02X05-0.05in
+Through hole pin header
+pin header
 0
-MountingHole
-MountingHole_2.2mm_M2_DIN965
-Mounting Hole 2.2mm, no annular, M2, DIN965
-mounting hole 2.2mm no annular m2 din965
+12
+12
+footprints
+BMS
+Through hole pin header
+pin header
 0
+14
+14
+footprints
+BMS-STACK-CONNECTOR
+Through hole pin header
+pin header
 0
-0
-MountingHole
-MountingHole_2.2mm_M2_DIN965_Pad
-Mounting Hole 2.2mm, M2, DIN965
-mounting hole 2.2mm m2 din965
-0
-1
-1
-MountingHole
-MountingHole_2.2mm_M2_DIN965_Pad_TopBottom
-Mounting Hole 2.2mm, M2, DIN965
-mounting hole 2.2mm m2 din965
-0
-3
-1
-MountingHole
-MountingHole_2.2mm_M2_DIN965_Pad_TopOnly
-Mounting Hole 2.2mm, M2, DIN965
-mounting hole 2.2mm m2 din965
-0
-2
-1
-MountingHole
-MountingHole_2.2mm_M2_ISO7380
-Mounting Hole 2.2mm, no annular, M2, ISO7380
-mounting hole 2.2mm no annular m2 iso7380
-0
-0
-0
-MountingHole
-MountingHole_2.2mm_M2_ISO7380_Pad
-Mounting Hole 2.2mm, M2, ISO7380
-mounting hole 2.2mm m2 iso7380
-0
-1
-1
-MountingHole
-MountingHole_2.2mm_M2_ISO7380_Pad_TopBottom
-Mounting Hole 2.2mm, M2, ISO7380
-mounting hole 2.2mm m2 iso7380
-0
-3
-1
-MountingHole
-MountingHole_2.2mm_M2_ISO7380_Pad_TopOnly
-Mounting Hole 2.2mm, M2, ISO7380
-mounting hole 2.2mm m2 iso7380
+20
+20
+footprints
+CONN-JST-PH-2-PTH
+
+
 0
 2
-1
-MountingHole
-MountingHole_2.2mm_M2_ISO14580
-Mounting Hole 2.2mm, no annular, M2, ISO14580
-mounting hole 2.2mm no annular m2 iso14580
-0
-0
-0
-MountingHole
-MountingHole_2.2mm_M2_ISO14580_Pad
-Mounting Hole 2.2mm, M2, ISO14580
-mounting hole 2.2mm m2 iso14580
-0
-1
-1
-MountingHole
-MountingHole_2.2mm_M2_ISO14580_Pad_TopBottom
-Mounting Hole 2.2mm, M2, ISO14580
-mounting hole 2.2mm m2 iso14580
-0
-3
-1
-MountingHole
-MountingHole_2.2mm_M2_ISO14580_Pad_TopOnly
-Mounting Hole 2.2mm, M2, ISO14580
-mounting hole 2.2mm m2 iso14580
+2
+footprints
+CONN-JST-PH-2-PTH-RGT
+
+
 0
 2
-1
-MountingHole
-MountingHole_2.2mm_M2_Pad
-Mounting Hole 2.2mm, M2
-mounting hole 2.2mm m2
+2
+footprints
+CONN-JST-PH-2-SMD
+
+
 0
-1
-1
-MountingHole
-MountingHole_2.2mm_M2_Pad_TopBottom
-Mounting Hole 2.2mm, M2
-mounting hole 2.2mm m2
+4
+4
+footprints
+CONN-JST-PH-2-SMD-RGT
+
+
+0
+4
+4
+footprints
+CONN-JST-PH-3-PTH
+
+
 0
 3
-1
-MountingHole
-MountingHole_2.2mm_M2_Pad_TopOnly
-Mounting Hole 2.2mm, M2
-mounting hole 2.2mm m2
+3
+footprints
+CONN-JST-PH-3-PTH-RGT
+
+
 0
-2
-1
-MountingHole
-MountingHole_2.2mm_M2_Pad_Via
-Mounting Hole 2.2mm, M2
-mounting hole 2.2mm m2
+3
+3
+footprints
+CONN-JST-PH-3-SMD
+
+
+0
+5
+5
+footprints
+CONN-JST-PH-3-SMD-RGT
+
+
+0
+5
+5
+footprints
+CONN-JST-PH-4-PTH
+
+
+0
+4
+4
+footprints
+CONN-JST-PH-4-PTH-RGT
+
+
+0
+4
+4
+footprints
+CONN-JST-PH-4-SMD
+
+
+0
+6
+6
+footprints
+CONN-JST-PH-4-SMD-RGT
+
+
+0
+6
+6
+footprints
+CONN-JST-PH-5-PTH
+
+
+0
+5
+5
+footprints
+CONN-JST-PH-5-PTH-RGT
+
+
+0
+5
+5
+footprints
+CONN-JST-PH-5-SMD
+
+
+0
+7
+7
+footprints
+CONN-JST-PH-5-SMD-RGT
+
+
+0
+7
+7
+footprints
+CONN-JST-PH-6-PTH
+
+
+0
+6
+6
+footprints
+CONN-JST-PH-6-PTH-RGT
+
+
+0
+6
+6
+footprints
+CONN-JST-PH-6-SMD
+
+
+0
+8
+8
+footprints
+CONN-JST-PH-6-SMD-RGT
+
+
+0
+8
+8
+footprints
+CONN-JST-PH-7-PTH
+
+
+0
+7
+7
+footprints
+CONN-JST-PH-7-PTH-RGT
+
+
+0
+7
+7
+footprints
+CONN-JST-PH-7-SMD
+
+
 0
 9
-1
-MountingHole
-MountingHole_2.5mm
-Mounting Hole 2.5mm, no annular
-mounting hole 2.5mm no annular
-0
-0
-0
-MountingHole
-MountingHole_2.5mm_Pad
-Mounting Hole 2.5mm
-mounting hole 2.5mm
-0
-1
-1
-MountingHole
-MountingHole_2.5mm_Pad_TopBottom
-Mounting Hole 2.5mm
-mounting hole 2.5mm
-0
-3
-1
-MountingHole
-MountingHole_2.5mm_Pad_TopOnly
-Mounting Hole 2.5mm
-mounting hole 2.5mm
-0
-2
-1
-MountingHole
-MountingHole_2.5mm_Pad_Via
-Mounting Hole 2.5mm
-mounting hole 2.5mm
+9
+footprints
+CONN-JST-PH-7-SMD-RGT
+
+
 0
 9
-1
-MountingHole
-MountingHole_2.7mm
-Mounting Hole 2.7mm, no annular
-mounting hole 2.7mm no annular
+9
+footprints
+CONN-JST-PH-8-PTH
+
+
 0
+8
+8
+footprints
+CONN-JST-PH-8-PTH-RGT
+
+
 0
+8
+8
+footprints
+CONN-JST-PH-8-SMD
+
+
 0
-MountingHole
-MountingHole_2.7mm_M2.5
-Mounting Hole 2.7mm, no annular, M2.5
-mounting hole 2.7mm no annular m2.5
+10
+10
+footprints
+CONN-JST-PH-8-SMD-RGT
+
+
 0
-0
-0
-MountingHole
-MountingHole_2.7mm_M2.5_DIN965
-Mounting Hole 2.7mm, no annular, M2.5, DIN965
-mounting hole 2.7mm no annular m2.5 din965
-0
-0
-0
-MountingHole
-MountingHole_2.7mm_M2.5_DIN965_Pad
-Mounting Hole 2.7mm, M2.5, DIN965
-mounting hole 2.7mm m2.5 din965
-0
-1
-1
-MountingHole
-MountingHole_2.7mm_M2.5_DIN965_Pad_TopBottom
-Mounting Hole 2.7mm, M2.5, DIN965
-mounting hole 2.7mm m2.5 din965
-0
-3
-1
-MountingHole
-MountingHole_2.7mm_M2.5_DIN965_Pad_TopOnly
-Mounting Hole 2.7mm, M2.5, DIN965
-mounting hole 2.7mm m2.5 din965
-0
-2
-1
-MountingHole
-MountingHole_2.7mm_M2.5_ISO7380
-Mounting Hole 2.7mm, no annular, M2.5, ISO7380
-mounting hole 2.7mm no annular m2.5 iso7380
-0
-0
-0
-MountingHole
-MountingHole_2.7mm_M2.5_ISO7380_Pad
-Mounting Hole 2.7mm, M2.5, ISO7380
-mounting hole 2.7mm m2.5 iso7380
-0
-1
-1
-MountingHole
-MountingHole_2.7mm_M2.5_ISO7380_Pad_TopBottom
-Mounting Hole 2.7mm, M2.5, ISO7380
-mounting hole 2.7mm m2.5 iso7380
-0
-3
-1
-MountingHole
-MountingHole_2.7mm_M2.5_ISO7380_Pad_TopOnly
-Mounting Hole 2.7mm, M2.5, ISO7380
-mounting hole 2.7mm m2.5 iso7380
-0
-2
-1
-MountingHole
-MountingHole_2.7mm_M2.5_ISO14580
-Mounting Hole 2.7mm, no annular, M2.5, ISO14580
-mounting hole 2.7mm no annular m2.5 iso14580
-0
-0
-0
-MountingHole
-MountingHole_2.7mm_M2.5_ISO14580_Pad
-Mounting Hole 2.7mm, M2.5, ISO14580
-mounting hole 2.7mm m2.5 iso14580
-0
-1
-1
-MountingHole
-MountingHole_2.7mm_M2.5_ISO14580_Pad_TopBottom
-Mounting Hole 2.7mm, M2.5, ISO14580
-mounting hole 2.7mm m2.5 iso14580
-0
-3
-1
-MountingHole
-MountingHole_2.7mm_M2.5_ISO14580_Pad_TopOnly
-Mounting Hole 2.7mm, M2.5, ISO14580
-mounting hole 2.7mm m2.5 iso14580
-0
-2
-1
-MountingHole
-MountingHole_2.7mm_M2.5_Pad
-Mounting Hole 2.7mm, M2.5
-mounting hole 2.7mm m2.5
-0
-1
-1
-MountingHole
-MountingHole_2.7mm_M2.5_Pad_TopBottom
-Mounting Hole 2.7mm, M2.5
-mounting hole 2.7mm m2.5
-0
-3
-1
-MountingHole
-MountingHole_2.7mm_M2.5_Pad_TopOnly
-Mounting Hole 2.7mm, M2.5
-mounting hole 2.7mm m2.5
-0
-2
-1
-MountingHole
-MountingHole_2.7mm_M2.5_Pad_Via
-Mounting Hole 2.7mm
-mounting hole 2.7mm
+10
+10
+footprints
+CONN-JST-PH-9-PTH
+
+
 0
 9
-1
-MountingHole
-MountingHole_2.7mm_Pad
-Mounting Hole 2.7mm
-mounting hole 2.7mm
-0
-1
-1
-MountingHole
-MountingHole_2.7mm_Pad_TopBottom
-Mounting Hole 2.7mm
-mounting hole 2.7mm
-0
-3
-1
-MountingHole
-MountingHole_2.7mm_Pad_TopOnly
-Mounting Hole 2.7mm
-mounting hole 2.7mm
-0
-2
-1
-MountingHole
-MountingHole_2.7mm_Pad_Via
-Mounting Hole 2.7mm
-mounting hole 2.7mm
+9
+footprints
+CONN-JST-PH-9-PTH-RGT
+
+
 0
 9
-1
-MountingHole
-MountingHole_2mm
-Mounting Hole 2mm, no annular
-mounting hole 2mm no annular
-0
-0
-0
-MountingHole
-MountingHole_3.2mm_M3
-Mounting Hole 3.2mm, no annular, M3
-mounting hole 3.2mm no annular m3
-0
-0
-0
-MountingHole
-MountingHole_3.2mm_M3_DIN965
-Mounting Hole 3.2mm, no annular, M3, DIN965
-mounting hole 3.2mm no annular m3 din965
-0
-0
-0
-MountingHole
-MountingHole_3.2mm_M3_DIN965_Pad
-Mounting Hole 3.2mm, M3, DIN965
-mounting hole 3.2mm m3 din965
-0
-1
-1
-MountingHole
-MountingHole_3.2mm_M3_DIN965_Pad_TopBottom
-Mounting Hole 3.2mm, M3, DIN965
-mounting hole 3.2mm m3 din965
-0
-3
-1
-MountingHole
-MountingHole_3.2mm_M3_DIN965_Pad_TopOnly
-Mounting Hole 3.2mm, M3, DIN965
-mounting hole 3.2mm m3 din965
-0
-2
-1
-MountingHole
-MountingHole_3.2mm_M3_ISO7380
-Mounting Hole 3.2mm, no annular, M3, ISO7380
-mounting hole 3.2mm no annular m3 iso7380
-0
-0
-0
-MountingHole
-MountingHole_3.2mm_M3_ISO7380_Pad
-Mounting Hole 3.2mm, M3, ISO7380
-mounting hole 3.2mm m3 iso7380
-0
-1
-1
-MountingHole
-MountingHole_3.2mm_M3_ISO7380_Pad_TopBottom
-Mounting Hole 3.2mm, M3, ISO7380
-mounting hole 3.2mm m3 iso7380
-0
-3
-1
-MountingHole
-MountingHole_3.2mm_M3_ISO7380_Pad_TopOnly
-Mounting Hole 3.2mm, M3, ISO7380
-mounting hole 3.2mm m3 iso7380
-0
-2
-1
-MountingHole
-MountingHole_3.2mm_M3_ISO14580
-Mounting Hole 3.2mm, no annular, M3, ISO14580
-mounting hole 3.2mm no annular m3 iso14580
-0
-0
-0
-MountingHole
-MountingHole_3.2mm_M3_ISO14580_Pad
-Mounting Hole 3.2mm, M3, ISO14580
-mounting hole 3.2mm m3 iso14580
-0
-1
-1
-MountingHole
-MountingHole_3.2mm_M3_ISO14580_Pad_TopBottom
-Mounting Hole 3.2mm, M3, ISO14580
-mounting hole 3.2mm m3 iso14580
-0
-3
-1
-MountingHole
-MountingHole_3.2mm_M3_ISO14580_Pad_TopOnly
-Mounting Hole 3.2mm, M3, ISO14580
-mounting hole 3.2mm m3 iso14580
-0
-2
-1
-MountingHole
-MountingHole_3.2mm_M3_Pad
-Mounting Hole 3.2mm, M3
-mounting hole 3.2mm m3
-0
-1
-1
-MountingHole
-MountingHole_3.2mm_M3_Pad_TopBottom
-Mounting Hole 3.2mm, M3
-mounting hole 3.2mm m3
-0
-3
-1
-MountingHole
-MountingHole_3.2mm_M3_Pad_TopOnly
-Mounting Hole 3.2mm, M3
-mounting hole 3.2mm m3
-0
-2
-1
-MountingHole
-MountingHole_3.2mm_M3_Pad_Via
-Mounting Hole 3.2mm, M3
-mounting hole 3.2mm m3
-0
 9
-1
-MountingHole
-MountingHole_3.5mm
-Mounting Hole 3.5mm, no annular
-mounting hole 3.5mm no annular
+footprints
+CONN-JST-PH-9-SMD
+
+
 0
+11
+11
+footprints
+CONN-JST-PH-9-SMD-RGT
+
+
 0
+11
+11
+footprints
+CONN-JST-PH-10-PTH
+
+
 0
-MountingHole
-MountingHole_3.5mm_Pad
-Mounting Hole 3.5mm
-mounting hole 3.5mm
+10
+10
+footprints
+CONN-JST-PH-10-PTH-RGT
+
+
 0
-1
-1
-MountingHole
-MountingHole_3.5mm_Pad_TopBottom
-Mounting Hole 3.5mm
-mounting hole 3.5mm
+10
+10
+footprints
+CONN-JST-PH-10-SMD
+
+
 0
-3
-1
-MountingHole
-MountingHole_3.5mm_Pad_TopOnly
-Mounting Hole 3.5mm
-mounting hole 3.5mm
+12
+12
+footprints
+CONN-JST-PH-10-SMD-RGT
+
+
 0
-2
-1
-MountingHole
-MountingHole_3.5mm_Pad_Via
-Mounting Hole 3.5mm
-mounting hole 3.5mm
+12
+12
+footprints
+CONN-JST-PH-11-PTH
+
+
 0
-9
-1
-MountingHole
-MountingHole_3.7mm
-Mounting Hole 3.7mm, no annular
-mounting hole 3.7mm no annular
+11
+11
+footprints
+CONN-JST-PH-11-PTH-RGT
+
+
 0
+11
+11
+footprints
+CONN-JST-PH-11-SMD
+
+
 0
+13
+13
+footprints
+CONN-JST-PH-11-SMD-RGT
+
+
 0
-MountingHole
-MountingHole_3.7mm_Pad
-Mounting Hole 3.7mm
-mounting hole 3.7mm
+13
+13
+footprints
+CONN-JST-PH-12-PTH
+
+
 0
-1
-1
-MountingHole
-MountingHole_3.7mm_Pad_TopBottom
-Mounting Hole 3.7mm
-mounting hole 3.7mm
+12
+12
+footprints
+CONN-JST-PH-12-PTH-RGT
+
+
 0
-3
-1
-MountingHole
-MountingHole_3.7mm_Pad_TopOnly
-Mounting Hole 3.7mm
-mounting hole 3.7mm
+12
+12
+footprints
+CONN-JST-PH-12-SMD
+
+
 0
-2
-1
-MountingHole
-MountingHole_3.7mm_Pad_Via
-Mounting Hole 3.7mm
-mounting hole 3.7mm
+14
+14
+footprints
+CONN-JST-PH-12-SMD-RGT
+
+
 0
-9
-1
-MountingHole
-MountingHole_3mm
-Mounting Hole 3mm, no annular
-mounting hole 3mm no annular
+14
+14
+footprints
+CONN-JST-PH-13-PTH
+
+
 0
+13
+13
+footprints
+CONN-JST-PH-13-PTH-RGT
+
+
 0
+13
+13
+footprints
+CONN-JST-PH-13-SMD
+
+
 0
-MountingHole
-MountingHole_3mm_Pad
-Mounting Hole 3mm
-mounting hole 3mm
+15
+15
+footprints
+CONN-JST-PH-13-SMD-RGT
+
+
 0
-1
-1
-MountingHole
-MountingHole_3mm_Pad_TopBottom
-Mounting Hole 3mm
-mounting hole 3mm
+15
+15
+footprints
+CONN-JST-PH-14-PTH
+
+
 0
-3
-1
-MountingHole
-MountingHole_3mm_Pad_TopOnly
-Mounting Hole 3mm
-mounting hole 3mm
+14
+14
+footprints
+CONN-JST-PH-14-PTH-RGT
+
+
 0
-2
-1
-MountingHole
-MountingHole_3mm_Pad_Via
-Mounting Hole 3mm
-mounting hole 3mm
+14
+14
+footprints
+CONN-JST-PH-14-SMD
+
+
 0
-9
-1
-MountingHole
-MountingHole_4.3mm_M4
-Mounting Hole 4.3mm, no annular, M4
-mounting hole 4.3mm no annular m4
+16
+16
+footprints
+CONN-JST-PH-14-SMD-RGT
+
+
 0
+16
+16
+footprints
+CONN-JST-PH-15-PTH
+
+
 0
+15
+15
+footprints
+CONN-JST-PH-15-PTH-RGT
+
+
 0
-MountingHole
-MountingHole_4.3mm_M4_DIN965
-Mounting Hole 4.3mm, no annular, M4, DIN965
-mounting hole 4.3mm no annular m4 din965
-0
-0
-0
-MountingHole
-MountingHole_4.3mm_M4_DIN965_Pad
-Mounting Hole 4.3mm, M4, DIN965
-mounting hole 4.3mm m4 din965
-0
-1
-1
-MountingHole
-MountingHole_4.3mm_M4_DIN965_Pad_TopBottom
-Mounting Hole 4.3mm, M4, DIN965
-mounting hole 4.3mm m4 din965
-0
-3
-1
-MountingHole
-MountingHole_4.3mm_M4_DIN965_Pad_TopOnly
-Mounting Hole 4.3mm, M4, DIN965
-mounting hole 4.3mm m4 din965
-0
-2
-1
-MountingHole
-MountingHole_4.3mm_M4_ISO7380
-Mounting Hole 4.3mm, no annular, M4, ISO7380
-mounting hole 4.3mm no annular m4 iso7380
-0
-0
-0
-MountingHole
-MountingHole_4.3mm_M4_ISO7380_Pad
-Mounting Hole 4.3mm, M4, ISO7380
-mounting hole 4.3mm m4 iso7380
-0
-1
-1
-MountingHole
-MountingHole_4.3mm_M4_ISO7380_Pad_TopBottom
-Mounting Hole 4.3mm, M4, ISO7380
-mounting hole 4.3mm m4 iso7380
-0
-3
-1
-MountingHole
-MountingHole_4.3mm_M4_ISO7380_Pad_TopOnly
-Mounting Hole 4.3mm, M4, ISO7380
-mounting hole 4.3mm m4 iso7380
-0
-2
-1
-MountingHole
-MountingHole_4.3mm_M4_ISO14580
-Mounting Hole 4.3mm, no annular, M4, ISO14580
-mounting hole 4.3mm no annular m4 iso14580
-0
-0
-0
-MountingHole
-MountingHole_4.3mm_M4_ISO14580_Pad
-Mounting Hole 4.3mm, M4, ISO14580
-mounting hole 4.3mm m4 iso14580
-0
-1
-1
-MountingHole
-MountingHole_4.3mm_M4_ISO14580_Pad_TopBottom
-Mounting Hole 4.3mm, M4, ISO14580
-mounting hole 4.3mm m4 iso14580
-0
-3
-1
-MountingHole
-MountingHole_4.3mm_M4_ISO14580_Pad_TopOnly
-Mounting Hole 4.3mm, M4, ISO14580
-mounting hole 4.3mm m4 iso14580
-0
-2
-1
-MountingHole
-MountingHole_4.3mm_M4_Pad
-Mounting Hole 4.3mm, M4
-mounting hole 4.3mm m4
-0
-1
-1
-MountingHole
-MountingHole_4.3mm_M4_Pad_TopBottom
-Mounting Hole 4.3mm, M4
-mounting hole 4.3mm m4
-0
-3
-1
-MountingHole
-MountingHole_4.3mm_M4_Pad_TopOnly
-Mounting Hole 4.3mm, M4
-mounting hole 4.3mm m4
-0
-2
-1
-MountingHole
-MountingHole_4.3mm_M4_Pad_Via
-Mounting Hole 4.3mm, M4
-mounting hole 4.3mm m4
-0
-9
-1
-MountingHole
-MountingHole_4.3x6.2mm_M4_Pad
-Mounting Hole 4.3x6.2mm, M4
-mounting hole 4.3x6.2mm m4
-0
-1
-1
-MountingHole
-MountingHole_4.3x6.2mm_M4_Pad_Via
-Mounting Hole 4.3x6.2mm, M4
-mounting hole 4.3x6.2mm m4
+15
+15
+footprints
+CONN-JST-PH-15-SMD
+
+
 0
 17
-1
-MountingHole
-MountingHole_4.5mm
-Mounting Hole 4.5mm, no annular
-mounting hole 4.5mm no annular
+17
+footprints
+CONN-JST-PH-15-SMD-RGT
+
+
 0
+17
+17
+footprints
+CONN-JST-PH-16-PTH
+
+
 0
+16
+16
+footprints
+CONN-JST-PH-16-PTH-RGT
+
+
 0
-MountingHole
-MountingHole_4.5mm_Pad
-Mounting Hole 4.5mm
-mounting hole 4.5mm
+16
+16
+footprints
+CONN-JST-PH-16-SMD
+
+
 0
-1
-1
-MountingHole
-MountingHole_4.5mm_Pad_TopBottom
-Mounting Hole 4.5mm
-mounting hole 4.5mm
+18
+18
+footprints
+CONN-JST-PH-16-SMD-RGT
+
+
 0
-3
-1
-MountingHole
-MountingHole_4.5mm_Pad_TopOnly
-Mounting Hole 4.5mm
-mounting hole 4.5mm
+18
+18
+footprints
+CONN-JST-VH-2-PTH
+
+
 0
 2
-1
-MountingHole
-MountingHole_4.5mm_Pad_Via
-Mounting Hole 4.5mm
-mounting hole 4.5mm
+2
+footprints
+CONN-JST-VH-2-PTH-BOSS
+
+
+0
+2
+2
+footprints
+CONN-JST-VH-2-PTH-RGT
+
+
+0
+2
+2
+footprints
+CONN-JST-VH-3-PTH
+
+
+0
+3
+3
+footprints
+CONN-JST-VH-3-PTH-BOSS
+
+
+0
+3
+3
+footprints
+CONN-JST-VH-3-PTH-RGT
+
+
+0
+3
+3
+footprints
+CONN-JST-VH-4-PTH
+
+
+0
+4
+4
+footprints
+CONN-JST-VH-4-PTH-BOSS
+
+
+0
+4
+4
+footprints
+CONN-JST-VH-4-PTH-RGT
+
+
+0
+4
+4
+footprints
+CONN-JST-VH-5-PTH
+
+
+0
+5
+5
+footprints
+CONN-JST-VH-5-PTH-BOSS
+
+
+0
+5
+5
+footprints
+CONN-JST-VH-5-PTH-RGT
+
+
+0
+5
+5
+footprints
+CONN-JST-VH-6-PTH
+
+
+0
+6
+6
+footprints
+CONN-JST-VH-6-PTH-BOSS
+
+
+0
+6
+6
+footprints
+CONN-JST-VH-6-PTH-RGT
+
+
+0
+6
+6
+footprints
+CONN-JST-VH-7-PTH
+
+
+0
+7
+7
+footprints
+CONN-JST-VH-7-PTH-BOSS
+
+
+0
+7
+7
+footprints
+CONN-JST-VH-7-PTH-RGT
+
+
+0
+7
+7
+footprints
+CONN-JST-VH-8-PTH
+
+
+0
+8
+8
+footprints
+CONN-JST-VH-8-PTH-BOSS
+
+
+0
+8
+8
+footprints
+CONN-JST-VH-8-PTH-RGT
+
+
+0
+8
+8
+footprints
+CONN-JST-VH-9-PTH
+
+
 0
 9
-1
-MountingHole
-MountingHole_4mm
-Mounting Hole 4mm, no annular
-mounting hole 4mm no annular
-0
-0
-0
-MountingHole
-MountingHole_4mm_Pad
-Mounting Hole 4mm
-mounting hole 4mm
-0
-1
-1
-MountingHole
-MountingHole_4mm_Pad_TopBottom
-Mounting Hole 4mm
-mounting hole 4mm
-0
-3
-1
-MountingHole
-MountingHole_4mm_Pad_TopOnly
-Mounting Hole 4mm
-mounting hole 4mm
-0
-2
-1
-MountingHole
-MountingHole_4mm_Pad_Via
-Mounting Hole 4mm
-mounting hole 4mm
+9
+footprints
+CONN-JST-VH-9-PTH-BOSS
+
+
 0
 9
-1
-MountingHole
-MountingHole_5.3mm_M5
-Mounting Hole 5.3mm, no annular, M5
-mounting hole 5.3mm no annular m5
-0
-0
-0
-MountingHole
-MountingHole_5.3mm_M5_DIN965
-Mounting Hole 5.3mm, no annular, M5, DIN965
-mounting hole 5.3mm no annular m5 din965
-0
-0
-0
-MountingHole
-MountingHole_5.3mm_M5_DIN965_Pad
-Mounting Hole 5.3mm, M5, DIN965
-mounting hole 5.3mm m5 din965
-0
-1
-1
-MountingHole
-MountingHole_5.3mm_M5_DIN965_Pad_TopBottom
-Mounting Hole 5.3mm, M5, DIN965
-mounting hole 5.3mm m5 din965
-0
-3
-1
-MountingHole
-MountingHole_5.3mm_M5_DIN965_Pad_TopOnly
-Mounting Hole 5.3mm, M5, DIN965
-mounting hole 5.3mm m5 din965
-0
-2
-1
-MountingHole
-MountingHole_5.3mm_M5_ISO7380
-Mounting Hole 5.3mm, no annular, M5, ISO7380
-mounting hole 5.3mm no annular m5 iso7380
-0
-0
-0
-MountingHole
-MountingHole_5.3mm_M5_ISO7380_Pad
-Mounting Hole 5.3mm, M5, ISO7380
-mounting hole 5.3mm m5 iso7380
-0
-1
-1
-MountingHole
-MountingHole_5.3mm_M5_ISO7380_Pad_TopBottom
-Mounting Hole 5.3mm, M5, ISO7380
-mounting hole 5.3mm m5 iso7380
-0
-3
-1
-MountingHole
-MountingHole_5.3mm_M5_ISO7380_Pad_TopOnly
-Mounting Hole 5.3mm, M5, ISO7380
-mounting hole 5.3mm m5 iso7380
-0
-2
-1
-MountingHole
-MountingHole_5.3mm_M5_ISO14580
-Mounting Hole 5.3mm, no annular, M5, ISO14580
-mounting hole 5.3mm no annular m5 iso14580
-0
-0
-0
-MountingHole
-MountingHole_5.3mm_M5_ISO14580_Pad
-Mounting Hole 5.3mm, M5, ISO14580
-mounting hole 5.3mm m5 iso14580
-0
-1
-1
-MountingHole
-MountingHole_5.3mm_M5_ISO14580_Pad_TopBottom
-Mounting Hole 5.3mm, M5, ISO14580
-mounting hole 5.3mm m5 iso14580
-0
-3
-1
-MountingHole
-MountingHole_5.3mm_M5_ISO14580_Pad_TopOnly
-Mounting Hole 5.3mm, M5, ISO14580
-mounting hole 5.3mm m5 iso14580
-0
-2
-1
-MountingHole
-MountingHole_5.3mm_M5_Pad
-Mounting Hole 5.3mm, M5
-mounting hole 5.3mm m5
-0
-1
-1
-MountingHole
-MountingHole_5.3mm_M5_Pad_TopBottom
-Mounting Hole 5.3mm, M5
-mounting hole 5.3mm m5
-0
-3
-1
-MountingHole
-MountingHole_5.3mm_M5_Pad_TopOnly
-Mounting Hole 5.3mm, M5
-mounting hole 5.3mm m5
-0
-2
-1
-MountingHole
-MountingHole_5.3mm_M5_Pad_Via
-Mounting Hole 5.3mm, M5
-mounting hole 5.3mm m5
+9
+footprints
+CONN-JST-VH-9-PTH-RGT
+
+
 0
 9
-1
-MountingHole
-MountingHole_5.5mm
-Mounting Hole 5.5mm, no annular
-mounting hole 5.5mm no annular
+9
+footprints
+CONN-JST-VH-10-PTH
+
+
 0
+10
+10
+footprints
+CONN-JST-VH-10-PTH-BOSS
+
+
 0
+10
+10
+footprints
+CONN-JST-VH-10-PTH-RGT
+
+
 0
-MountingHole
-MountingHole_5.5mm_Pad
-Mounting Hole 5.5mm
-mounting hole 5.5mm
+10
+10
+footprints
+CONN-JST-VH-11-PTH
+
+
 0
-1
-1
-MountingHole
-MountingHole_5.5mm_Pad_TopBottom
-Mounting Hole 5.5mm
-mounting hole 5.5mm
-0
-3
-1
-MountingHole
-MountingHole_5.5mm_Pad_TopOnly
-Mounting Hole 5.5mm
-mounting hole 5.5mm
+11
+11
+footprints
+CONN-JST-XH-2-PTH
+
+
 0
 2
-1
-MountingHole
-MountingHole_5.5mm_Pad_Via
-Mounting Hole 5.5mm
-mounting hole 5.5mm
+2
+footprints
+CONN-JST-XH-2-PTH-BOSS
+
+
+0
+2
+2
+footprints
+CONN-JST-XH-2-PTH-RGT
+
+
+0
+2
+2
+footprints
+CONN-JST-XH-3-PTH
+
+
+0
+3
+3
+footprints
+CONN-JST-XH-3-PTH-BOSS
+
+
+0
+3
+3
+footprints
+CONN-JST-XH-3-PTH-RGT
+
+
+0
+3
+3
+footprints
+CONN-JST-XH-3-SMD-RGT
+
+
+0
+5
+5
+footprints
+CONN-JST-XH-4-PTH
+
+
+0
+4
+4
+footprints
+CONN-JST-XH-4-PTH-BOSS
+
+
+0
+4
+4
+footprints
+CONN-JST-XH-4-PTH-RGT
+
+
+0
+4
+4
+footprints
+CONN-JST-XH-4-SMD-RGT
+
+
+0
+6
+6
+footprints
+CONN-JST-XH-5-PTH
+
+
+0
+5
+5
+footprints
+CONN-JST-XH-5-PTH-BOSS
+
+
+0
+5
+5
+footprints
+CONN-JST-XH-5-PTH-RGT
+
+
+0
+5
+5
+footprints
+CONN-JST-XH-6-PTH
+
+
+0
+6
+6
+footprints
+CONN-JST-XH-6-PTH-BOSS
+
+
+0
+6
+6
+footprints
+CONN-JST-XH-6-PTH-RGT
+
+
+0
+6
+6
+footprints
+CONN-JST-XH-6-SMD-RGT
+
+
+0
+8
+8
+footprints
+CONN-JST-XH-7-PTH
+
+
+0
+7
+7
+footprints
+CONN-JST-XH-7-PTH-BOSS
+
+
+0
+7
+7
+footprints
+CONN-JST-XH-7-PTH-RGT
+
+
+0
+7
+7
+footprints
+CONN-JST-XH-8-PTH
+
+
+0
+8
+8
+footprints
+CONN-JST-XH-8-PTH-BOSS
+
+
+0
+8
+8
+footprints
+CONN-JST-XH-8-PTH-RGT
+
+
+0
+8
+8
+footprints
+CONN-JST-XH-9-PTH
+
+
 0
 9
-1
-MountingHole
-MountingHole_5mm
-Mounting Hole 5mm, no annular
-mounting hole 5mm no annular
-0
-0
-0
-MountingHole
-MountingHole_5mm_Pad
-Mounting Hole 5mm
-mounting hole 5mm
-0
-1
-1
-MountingHole
-MountingHole_5mm_Pad_TopBottom
-Mounting Hole 5mm
-mounting hole 5mm
-0
-3
-1
-MountingHole
-MountingHole_5mm_Pad_TopOnly
-Mounting Hole 5mm
-mounting hole 5mm
-0
-2
-1
-MountingHole
-MountingHole_5mm_Pad_Via
-Mounting Hole 5mm
-mounting hole 5mm
+9
+footprints
+CONN-JST-XH-9-PTH-BOSS
+
+
 0
 9
-1
-MountingHole
-MountingHole_6.4mm_M6
-Mounting Hole 6.4mm, no annular, M6
-mounting hole 6.4mm no annular m6
-0
-0
-0
-MountingHole
-MountingHole_6.4mm_M6_DIN965
-Mounting Hole 6.4mm, no annular, M6, DIN965
-mounting hole 6.4mm no annular m6 din965
-0
-0
-0
-MountingHole
-MountingHole_6.4mm_M6_DIN965_Pad
-Mounting Hole 6.4mm, M6, DIN965
-mounting hole 6.4mm m6 din965
-0
-1
-1
-MountingHole
-MountingHole_6.4mm_M6_DIN965_Pad_TopBottom
-Mounting Hole 6.4mm, M6, DIN965
-mounting hole 6.4mm m6 din965
-0
-3
-1
-MountingHole
-MountingHole_6.4mm_M6_DIN965_Pad_TopOnly
-Mounting Hole 6.4mm, M6, DIN965
-mounting hole 6.4mm m6 din965
-0
-2
-1
-MountingHole
-MountingHole_6.4mm_M6_ISO7380
-Mounting Hole 6.4mm, no annular, M6, ISO7380
-mounting hole 6.4mm no annular m6 iso7380
-0
-0
-0
-MountingHole
-MountingHole_6.4mm_M6_ISO7380_Pad
-Mounting Hole 6.4mm, M6, ISO7380
-mounting hole 6.4mm m6 iso7380
-0
-1
-1
-MountingHole
-MountingHole_6.4mm_M6_ISO7380_Pad_TopBottom
-Mounting Hole 6.4mm, M6, ISO7380
-mounting hole 6.4mm m6 iso7380
-0
-3
-1
-MountingHole
-MountingHole_6.4mm_M6_ISO7380_Pad_TopOnly
-Mounting Hole 6.4mm, M6, ISO7380
-mounting hole 6.4mm m6 iso7380
-0
-2
-1
-MountingHole
-MountingHole_6.4mm_M6_ISO14580
-Mounting Hole 6.4mm, no annular, M6, ISO14580
-mounting hole 6.4mm no annular m6 iso14580
-0
-0
-0
-MountingHole
-MountingHole_6.4mm_M6_ISO14580_Pad
-Mounting Hole 6.4mm, M6, ISO14580
-mounting hole 6.4mm m6 iso14580
-0
-1
-1
-MountingHole
-MountingHole_6.4mm_M6_ISO14580_Pad_TopBottom
-Mounting Hole 6.4mm, M6, ISO14580
-mounting hole 6.4mm m6 iso14580
-0
-3
-1
-MountingHole
-MountingHole_6.4mm_M6_ISO14580_Pad_TopOnly
-Mounting Hole 6.4mm, M6, ISO14580
-mounting hole 6.4mm m6 iso14580
-0
-2
-1
-MountingHole
-MountingHole_6.4mm_M6_Pad
-Mounting Hole 6.4mm, M6
-mounting hole 6.4mm m6
-0
-1
-1
-MountingHole
-MountingHole_6.4mm_M6_Pad_TopBottom
-Mounting Hole 6.4mm, M6
-mounting hole 6.4mm m6
-0
-3
-1
-MountingHole
-MountingHole_6.4mm_M6_Pad_TopOnly
-Mounting Hole 6.4mm, M6
-mounting hole 6.4mm m6
-0
-2
-1
-MountingHole
-MountingHole_6.4mm_M6_Pad_Via
-Mounting Hole 6.4mm, M6
-mounting hole 6.4mm m6
+9
+footprints
+CONN-JST-XH-9-PTH-RGT
+
+
 0
 9
-1
-MountingHole
-MountingHole_6.5mm
-Mounting Hole 6.5mm, no annular
-mounting hole 6.5mm no annular
+9
+footprints
+CONN-JST-XH-10-PTH
+
+
 0
+10
+10
+footprints
+CONN-JST-XH-10-PTH-BOSS
+
+
 0
+10
+10
+footprints
+CONN-JST-XH-10-PTH-RGT
+
+
 0
-MountingHole
-MountingHole_6.5mm_Pad
-Mounting Hole 6.5mm
-mounting hole 6.5mm
+10
+10
+footprints
+CONN-JST-XH-11-PTH
+
+
 0
-1
-1
-MountingHole
-MountingHole_6.5mm_Pad_TopBottom
-Mounting Hole 6.5mm
-mounting hole 6.5mm
+11
+11
+footprints
+CONN-JST-XH-11-PTH-RGT
+
+
 0
-3
-1
-MountingHole
-MountingHole_6.5mm_Pad_TopOnly
-Mounting Hole 6.5mm
-mounting hole 6.5mm
+11
+11
+footprints
+CONN-JST-XH-12-PTH
+
+
 0
-2
-1
-MountingHole
-MountingHole_6.5mm_Pad_Via
-Mounting Hole 6.5mm
-mounting hole 6.5mm
+12
+12
+footprints
+CONN-JST-XH-12-PTH-BOSS
+
+
+0
+12
+12
+footprints
+CONN-JST-XH-12-PTH-RGT
+
+
+0
+12
+12
+footprints
+CONN-JST-XH-13-PTH
+
+
+0
+13
+13
+footprints
+CONN-JST-XH-13-PTH-RGT
+
+
+0
+13
+13
+footprints
+CONN-JST-XH-14-PTH
+
+
+0
+14
+14
+footprints
+CONN-JST-XH-14-PTH-RGT
+
+
+0
+14
+14
+footprints
+CONN-JST-XH-15-PTH
+
+
+0
+15
+15
+footprints
+CONN-JST-XH-15-PTH-RGT
+
+
+0
+15
+15
+footprints
+CONN-JST-XH-16-PTH
+
+
+0
+16
+16
+footprints
+CONN-JST-XH-16-PTH-RGT
+
+
+0
+16
+16
+footprints
+CONN-JST-XH-20-PTH
+
+
+0
+20
+20
+footprints
+CONN-JST-XH-20-PTH-RGT
+
+
+0
+20
+20
+footprints
+CONN-TE-MICROMATCH-4X2-PTH
+
+
+0
+8
+8
+footprints
+CONN-TE-MICROMATCH-4X2-PTH-BOSS
+
+
+0
+8
+8
+footprints
+CONN-TE-MICROMATCH-4X2-SMD
+
+
+0
+8
+8
+footprints
+CONN-TE-MICROMATCH-6X2-PTH
+
+
+0
+12
+12
+footprints
+CONN-TE-MICROMATCH-6X2-PTH-BOSS
+
+
+0
+12
+12
+footprints
+CONN-TE-MICROMATCH-6X2-SMD
+
+
+0
+12
+12
+footprints
+CONN-TE-MICROMATCH-8X2-PTH
+
+
+0
+16
+16
+footprints
+CONN-TE-MICROMATCH-8X2-PTH-BOSS
+
+
+0
+16
+16
+footprints
+CONN-TE-MICROMATCH-8X2-SMD
+
+
+0
+16
+16
+footprints
+CONN-TE-MICROMATCH-10X2-PTH
+
+
+0
+20
+20
+footprints
+CONN-TE-MICROMATCH-10X2-PTH-BOSS
+
+
+0
+20
+20
+footprints
+CONN-TE-MICROMATCH-10X2-SMD
+
+
+0
+20
+20
+footprints
+CONN-TE-MICROMATCH-12X2-SMD
+
+
+0
+24
+24
+footprints
+CONN-TE-MICROMNL-2-PTH-MALE-RGT
+
+
+0
+4
+4
+footprints
+CONN-TE-MICROMNL-3-PTH-MALE-RGT
+
+
+0
+5
+5
+footprints
+CONN-TE-MICROMNL-4-PTH-MALE-RGT
+
+
+0
+6
+6
+footprints
+CONN-TE-MICROMNL-5-PTH-MALE-RGT
+
+
+0
+7
+7
+footprints
+CONN-TE-MICROMNL-6-PTH-MALE-RGT
+
+
+0
+8
+8
+footprints
+CONN-TE-MICROMNL-7-PTH-MALE-RGT
+
+
 0
 9
-1
-MountingHole
-MountingHole_6mm
-Mounting Hole 6mm, no annular
-mounting hole 6mm no annular
+9
+footprints
+CONN-TE-MICROMNL-8-PTH-MALE-RGT
+
+
 0
+10
+10
+footprints
+CONN-TE-MICROMNL-9-PTH-MALE-RGT
+
+
 0
+11
+11
+footprints
+CONN-TE-MICROMNL-10-PTH-MALE-RGT
+
+
 0
-MountingHole
-MountingHole_6mm_Pad
-Mounting Hole 6mm
-mounting hole 6mm
+12
+12
+footprints
+CONN-TE-MICROMNL-11-PTH-MALE-RGT
+
+
 0
-1
-1
-MountingHole
-MountingHole_6mm_Pad_TopBottom
-Mounting Hole 6mm
-mounting hole 6mm
+13
+13
+footprints
+CONN-TE-MICROMNL-12-PTH-MALE-RGT
+
+
+0
+14
+14
+footprints
+CONN-TE-VALULOK-3-PTH-BOSS
+
+
 0
 3
-1
-MountingHole
-MountingHole_6mm_Pad_TopOnly
-Mounting Hole 6mm
-mounting hole 6mm
-0
-2
-1
-MountingHole
-MountingHole_6mm_Pad_Via
-Mounting Hole 6mm
-mounting hole 6mm
-0
-9
-1
-MountingHole
-MountingHole_8.4mm_M8
-Mounting Hole 8.4mm, no annular, M8
-mounting hole 8.4mm no annular m8
-0
-0
-0
-MountingHole
-MountingHole_8.4mm_M8_Pad
-Mounting Hole 8.4mm, M8
-mounting hole 8.4mm m8
-0
-1
-1
-MountingHole
-MountingHole_8.4mm_M8_Pad_TopBottom
-Mounting Hole 8.4mm, M8
-mounting hole 8.4mm m8
+3
+footprints
+CONN-TE-VALULOK-3-PTH-RGT-BOSS
+
+
 0
 3
-1
-MountingHole
-MountingHole_8.4mm_M8_Pad_TopOnly
-Mounting Hole 8.4mm, M8
-mounting hole 8.4mm m8
+3
+footprints
+CONN-TE-VALULOK-4-PTH-BOSS
+
+
+0
+4
+4
+footprints
+CONN-TE-VALULOK-4-PTH-RGT-BOSS
+
+
+0
+4
+4
+footprints
+CONN-TE-VALULOK-5-PTH-BOSS
+
+
+0
+5
+5
+footprints
+CONN-TE-VALULOK-5-PTH-RGT-BOSS
+
+
+0
+5
+5
+footprints
+CPC1718
+
+
+0
+4
+4
+footprints
+D-Pak-TO252AA-Resistor
+D-Pak, TO252AA, Diode
+D-Pak TO252AA Diode
+0
+3
+3
+footprints
+D-Pak_TO252AA
+D-Pak, TO252AA, Diode
+D-Pak TO252AA Diode
+0
+3
+3
+footprints
+FUSE-MULTICHOICE
+Resistor, Axial, RM 15mm,
+Resistor Axial RM 15mm
+0
+4
+2
+footprints
+FUSEHOLDER-BLADE-LITTELFUSE-153
+
+
 0
 2
-1
-MountingHole
-MountingHole_8.4mm_M8_Pad_Via
-Mounting Hole 8.4mm, M8
-mounting hole 8.4mm m8
+2
+footprints
+M12-TE-5-2172077-2
+
+
+0
+10
+10
+footprints
+M12-TE-1838892-1
+
+
+0
+3
+3
+footprints
+M12-TE-1838892-2
+
+
+0
+4
+4
+footprints
+M12-TE-1838892-3
+
+
+0
+5
+5
+footprints
+M12-TE-1838892-4
+
+
+0
+8
+8
+footprints
+M12-TE-2232331-1
+
+
+0
+8
+8
+footprints
+MS56xx
+
+
+0
+8
+8
+footprints
+NODECORE
+
+
+0
+87
+55
+footprints
+OPTOCOUPLER-0.1in-6pin-SMD
+
+
+0
+6
+6
+footprints
+Oscillator_SMD_4_pin_2.5x2mm
+
+
+0
+4
+4
+footprints
+PCBOUTLINE-LENC022
+
+
+0
+20
+0
+footprints
+PCBOUTLINE-LENC022-CUT
+
+
+0
+0
+0
+footprints
+PCBOUTLINE-NODECORE
+
+
+0
+6
+0
+footprints
+PCBOUTLINE-POWERNODE
+
+
 0
 9
+9
+footprints
+R-6xxxP
+
+
+0
+12
+12
+footprints
+RELAY-G4W-2214P-US-HP
+
+
+0
+6
+6
+footprints
+RELAY-K10
+
+
+0
+8
+8
+footprints
+RELAY-SOCKET-K10
+
+
+0
+8
+8
+footprints
+RELAY-SOCKET-KUP-2FORM
+
+
+0
+11
+11
+footprints
+RELAY-SOCKET-RM-78-702
+
+
+0
+11
+11
+footprints
+RJ45-STEWART-SS-60300-010
+
+
+0
+10
+9
+footprints
+RJ45-TE-5558342-1
+
+
+0
+10
+9
+footprints
+Raspberry-Pi-2-Model-B
+
+
+0
+44
+44
+footprints
+SCREWPAD-2-56
+
+
+0
 1
+1
+footprints
+SCREWPAD-4-40
+
+
+0
+1
+1
+footprints
+SCREWPAD-6-32
+
+
+0
+1
+1
+footprints
+SCREWPAD-8-32
+
+
+0
+1
+1
+footprints
+SCREWPAD-M3
+
+
+0
+1
+1
+footprints
+SOD-323
+SOD-323
+SOD-323
+0
+2
+2
+footprints
+SOIC-8-W
+
+
+0
+8
+8
+footprints
+SOLDERJUMPER
+
+
+0
+2
+2
+footprints
+SOLDERJUMPER3
+
+
+0
+3
+3
+footprints
+SOT89-3-VREG
+SOT89-3, Housing,
+SOT89-3, Housing,
+0
+5
+3
+footprints
+TEENSY-3.2
+
+
+0
+51
+49
+footprints
+TO39
+
+
+0
+4
+4
+footprints
+TS305-10C50
+
+
+0
+4
+4
+footprints
+VICOR-DCDC
+
+
+0
+9
+9
