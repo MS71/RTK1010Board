@@ -37,6 +37,8 @@ C.) Mowgli HEAD with RTK-1010, ESP32-S2 and BNO055 IMU (todo)
 * VCC, GND, UART interface to YF mainboard
 * low power, sleep mode
 
+[Build Manual](BuildManual.pdf)
+
 [RTK 1010 datasheet](https://www.locosystech.com/Templates/att/RTK-1010_datasheet_v0.7.pdf)
 
 [Schematic](RTK1010Board.pdf)
