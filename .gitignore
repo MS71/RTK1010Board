@@ -5,3 +5,6 @@ gerber
 #auto_saved_files#
 _autosave*
 *-bak
+esp32_fw/sdkconfig
+esp32_fw/sdkconfig.old
+esp32_fw/build
