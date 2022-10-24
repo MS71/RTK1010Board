@@ -5199,7 +5199,7 @@
     (in_bom yes) (on_board yes)
     (uuid c299d71a-84e4-40f7-9ee1-677d209cfe81)
     (property "Reference" "R15" (id 0) (at 53.34 106.68 90))
-    (property "Value" "100" (id 1) (at 53.34 109.22 90))
+    (property "Value" "10k" (id 1) (at 53.34 109.22 90))
     (property "Footprint" "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" (id 2) (at 53.34 107.442 90)
       (effects (font (size 1.27 1.27)) hide)
     )
@@ -5781,7 +5781,7 @@
       (reference "R14") (unit 1) (value "100") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
     )
     (path "/c299d71a-84e4-40f7-9ee1-677d209cfe81"
-      (reference "R15") (unit 1) (value "100") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
+      (reference "R15") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")
     )
     (path "/d4656162-6d2b-4fad-bd7b-1cd330016fb1"
       (reference "R16") (unit 1) (value "10k") (footprint "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder")

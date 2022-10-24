@@ -1,0 +1,52 @@
+menu "RTK1010 Node Config"
+
+choice
+    prompt "HW Variant"
+    default RTK1010_NODE_ROVER_NTRIP_CLIENT
+
+    config RTK1010_NODE_ROVER_NTRIP_CLIENT
+        bool "Rover NTRIP Client"
+
+    config RTK1010_NODE_BASE_NTRIP_CASTER
+        bool "Base NTRIP Caster"
+endchoice
+
+config WIFI_RSSI_THRESHOLD
+    int "WiFi RSSI threshold to trigger roaming"
+    default 0
+    help
+        WiFi RSSI threshold to trigger roaming value in dbm (-100 to 0). 0 denotes feature is disabled.
+
+config WIFI_HOSTNAME
+	string "Wifi Hostname"
+	default "rtknode"
+
+config WIFI_SSID
+	string "Wifi SSID"
+	default ""
+
+config WIFI_PASSWORD
+	string "Wifi Password"
+	default ""
+
+config NTRIP_HOST
+	string "NTRIP Host"
+	default "ntrip host"
+
+config NTRIP_PORT
+	string "NTRIP Port"
+	default "2101"
+
+config NTRIP_USERNAME
+	string "NTRIP Username"
+	default "username"
+
+config NTRIP_PASSWORD
+	string "NTRIP Password"
+	default "password"
+
+config NTRIP_MOUNTPOINT
+	string "NTRIP Mountpoint"
+	default "mountpoint"
+
+endmenu
