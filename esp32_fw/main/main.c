@@ -39,12 +39,17 @@ void app_main(void)
 
     esp_tusb_init_console(TINYUSB_CDC_ACM_0); // log to usb
 
+    usleep(1000000);
+
     initialise_wifi();
+
+    //usleep(10000000);
+
     gps_init();
     
     while(1)
     {
-        ESP_LOGI(TAG, "...");
+        //ESP_LOGI(TAG, "...");
         usleep(1000000);
     }
 }
