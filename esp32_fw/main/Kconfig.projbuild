@@ -9,6 +9,12 @@ choice
 
     config RTK1010_NODE_BASE_NTRIP_CASTER
         bool "Base NTRIP Caster"
+
+      config RTK1010_NODE_SERIAL_ADAPTER
+        bool "Serial Adapter (RTK-1010 <=> USBSerial)"
+
+    config RTK1010_NODE_TCP_ADAPTER
+        bool "TCP Adapter (RTK-1010 <=> TCP Port)"
 endchoice
 
 config WIFI_RSSI_THRESHOLD
@@ -34,8 +40,8 @@ config NTRIP_HOST
 	default "ntrip host"
 
 config NTRIP_PORT
-	string "NTRIP Port"
-	default "2101"
+	int "NTRIP Port"
+	default 2101
 
 config NTRIP_USERNAME
 	string "NTRIP Username"

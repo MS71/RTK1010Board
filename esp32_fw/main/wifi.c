@@ -108,7 +108,7 @@ static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_
         s_ip_addr_changed = 1;
 
         xEventGroupSetBits(wifi_event_group, CONNECTED_BIT);
-#if 1
+#if 0
         wifi_ap_record_t ap_info = {};
         esp_wifi_sta_get_ap_info(&ap_info);
         ESP_LOGW(TAG, "wifi connected rssi=%d ssid=%s bssid=%02x:%02x:%02x:%02x:%02x:%02x channel=%d|%d", ap_info.rssi,
