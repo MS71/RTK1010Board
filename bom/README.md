@@ -52,8 +52,9 @@
 | Amount | Placement | Description | Reichelt Part# | Mouser Part# |
 | :----: | :-------: | :---------: | :------------: | :----------: |
 | 1 | U1             | RTK-1010 | - | - |
+| 1 | U2             | 3.3V LDO | [NCP 1117 ST33T3G](https://www.reichelt.de/ldo-regler-fest-3-3-v-sot-223-ncp-1117-st33t3g-p188925.html?search=NCP1117) | - |
 | 1 | C5             | 0805 capacitor 100nF | [KEM X7R0805 100N](https://reichelt.com/multi-layer-ceramic-capacitor-100nf-50v-125-c-kem-x7r0805-100n-p207073.html) | |
-| 2 | C11,C13        | tantalum 100µF/10V | [T491C 100U 10](https://reichelt.com/smd-tantalum-100-f-10v-125-c-t491c-100u-10-p206478.html) | |
+| 3 | C11,C12,C13    | tantalum 100µF/10V | [T491C 100U 10](https://reichelt.com/smd-tantalum-100-f-10v-125-c-t491c-100u-10-p206478.html) | |
 | 5 | C4,C5,C7,C8,C9 | 100nF/50V | [KEM Z5U0805 100N](https://www.reichelt.com/de/en/multi-layer-ceramic-capacitor-100nf-50v-85-c-kem-z5u0805-100n-p207084.html?search=100nF+0805) | |
 | 4 | R4,R5,R13,R14  | 0805 resistor 100Ω | [SMD-0805 100](https://reichelt.com/smd-chip-resistor-type-0805-100-ohm-smd-0805-100-p32874.html) | |
 | 2 | R15,R16        | 0805 resistor 10kΩ | [SMD-0805 10,0K](https://reichelt.com/smd-chip-resistor-type-0805-10-k-ohm-smd-0805-10-0k-p32898.html) | |
@@ -76,7 +77,7 @@
 | :----: | :-------: | :---------: | :------------: | :----------: |
 | 1 | U1             | RTK-1010 | - | - |
 | 1 | C5             | 0805 capacitor 100nF | [KEM X7R0805 100N](https://reichelt.com/multi-layer-ceramic-capacitor-100nf-50v-125-c-kem-x7r0805-100n-p207073.html) | |
-| 2 | C11,C13        | tantalum 100µF/10V | [T491C 100U 10](https://reichelt.com/smd-tantalum-100-f-10v-125-c-t491c-100u-10-p206478.html) | |
+| 3 | C11,C12,C13    | tantalum 100µF/10V | [T491C 100U 10](https://reichelt.com/smd-tantalum-100-f-10v-125-c-t491c-100u-10-p206478.html) | |
 | 5 | C4,C5,C7,C8,C9 | 100nF/50V | [KEM Z5U0805 100N](https://www.reichelt.com/de/en/multi-layer-ceramic-capacitor-100nf-50v-85-c-kem-z5u0805-100n-p207084.html?search=100nF+0805) | |
 | 4 | R4,R5,R13,R14  | 0805 resistor 100Ω | [SMD-0805 100](https://reichelt.com/smd-chip-resistor-type-0805-100-ohm-smd-0805-100-p32874.html) | |
 | 4 | R15,R16,R17,R18| 0805 resistor 10kΩ | [SMD-0805 10,0K](https://reichelt.com/smd-chip-resistor-type-0805-10-k-ohm-smd-0805-10-0k-p32898.html) | |
@@ -92,4 +93,10 @@
 | 1 | Mode Header    | Header | [Header](https://www.reichelt.de/stiftleisten-2-54-mm-1x02-gerade-mpe-087-1-002-p119879.html?&trstct=pol_0&nbc=1)| - |
 | 1 | Mode Jumper    | Jumper | [Jumper](https://www.reichelt.de/kurzschlussbruecke-rot-mit-grifflasche-jumper-2-54gl-rt-p9018.html?&trstct=pol_0&nbc=1)| - |
 
+#### Option LNA LDO
+
+| Amount | Placement | Description | Reichelt Part# | Mouser Part# |
+| :----: | :-------: | :---------: | :------------: | :----------: |
+| 1 | U3             | 3.3V LDO | [NCP 1117 ST33T3G](https://www.reichelt.de/ldo-regler-fest-3-3-v-sot-223-ncp-1117-st33t3g-p188925.html?search=NCP1117) | - |
+| 1 | C6 | 100nF/50V | [KEM Z5U0805 100N](https://www.reichelt.com/de/en/multi-layer-ceramic-capacitor-100nf-50v-85-c-kem-z5u0805-100n-p207084.html?search=100nF+0805) | |
 
