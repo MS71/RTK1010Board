@@ -56,7 +56,7 @@
 | 2 | C11,C13        | tantalum 100µF/10V | [T491C 100U 10](https://reichelt.com/smd-tantalum-100-f-10v-125-c-t491c-100u-10-p206478.html) | |
 | 5 | C4,C5,C7,C8,C9 | 100nF/50V | [KEM Z5U0805 100N](https://www.reichelt.com/de/en/multi-layer-ceramic-capacitor-100nf-50v-85-c-kem-z5u0805-100n-p207084.html?search=100nF+0805) | |
 | 4 | R4,R5,R13,R14  | 0805 resistor 100Ω | [SMD-0805 100](https://reichelt.com/smd-chip-resistor-type-0805-100-ohm-smd-0805-100-p32874.html) | |
-| 1 | R15            | 0805 resistor 10kΩ | [SMD-0805 10,0K](https://reichelt.com/smd-chip-resistor-type-0805-10-k-ohm-smd-0805-10-0k-p32898.html) | |
+| 2 | R15,R16        | 0805 resistor 10kΩ | [SMD-0805 10,0K](https://reichelt.com/smd-chip-resistor-type-0805-10-k-ohm-smd-0805-10-0k-p32898.html) | |
 | 2 | L1,L3          | 0804 Inductor 39nH | [L-0805AS 39N](https://www.reichelt.de/de/de/smd-induktivitaet-0805-keramik-39-nh-l-0805as-39n-p255488.html) | |
 | 1 | J2             | | - | [73412-0110](https://mouser.com/ProductDetail/Molex/73412-0110?qs=NlNVDDZd7xQHV8e0ilpSdQ%3D%3D) |
 | 1 | L1/L5 GPS      | Linx active GPS antenna | - | [ANT-GNCP-C25L15100](https://mouser.com/ProductDetail/Linx-Technologies/ANT-GNCP-C25L15100?qs=7D1LtPJG0i2oOR5Ka99M8Q%3D%3D) |
@@ -77,7 +77,7 @@
 | 2 | C11,C13        | tantalum 100µF/10V | [T491C 100U 10](https://reichelt.com/smd-tantalum-100-f-10v-125-c-t491c-100u-10-p206478.html) | |
 | 5 | C4,C5,C7,C8,C9 | 100nF/50V | [KEM Z5U0805 100N](https://www.reichelt.com/de/en/multi-layer-ceramic-capacitor-100nf-50v-85-c-kem-z5u0805-100n-p207084.html?search=100nF+0805) | |
 | 4 | R4,R5,R13,R14  | 0805 resistor 100Ω | [SMD-0805 100](https://reichelt.com/smd-chip-resistor-type-0805-100-ohm-smd-0805-100-p32874.html) | |
-| 3 | R15,R17,R18    | 0805 resistor 10kΩ | [SMD-0805 10,0K](https://reichelt.com/smd-chip-resistor-type-0805-10-k-ohm-smd-0805-10-0k-p32898.html) | |
+| 4 | R15,R16,R17,R18| 0805 resistor 10kΩ | [SMD-0805 10,0K](https://reichelt.com/smd-chip-resistor-type-0805-10-k-ohm-smd-0805-10-0k-p32898.html) | |
 | 2 | L1,L3          | 0804 Inductor 39nH | [L-0805AS 39N](https://www.reichelt.de/de/de/smd-induktivitaet-0805-keramik-39-nh-l-0805as-39n-p255488.html) | |
 | 1 | J2             | | - | [73412-0110](https://mouser.com/ProductDetail/Molex/73412-0110?qs=NlNVDDZd7xQHV8e0ilpSdQ%3D%3D) |
 | 1 | L1/L5 GPS      | Linx active GPS antenna | - | [ANT-GNCP-C25L15100](https://mouser.com/ProductDetail/Linx-Technologies/ANT-GNCP-C25L15100?qs=7D1LtPJG0i2oOR5Ka99M8Q%3D%3D) |
