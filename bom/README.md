@@ -65,6 +65,8 @@
 | 2 | C2, C3         | 0805 capacitor 100pF | [KEM C0G0805 100P](https://reichelt.com/multi-layer-ceramic-capacitor-100pf-50v-125-c-kem-c0g0805-100p-p207035.html) | |
 | 1 | J3             | USB socket | - | [649-10118194-0001LF](https://eu.mouser.com/ProductDetail/Amphenol-FCI/10118194-0001LF?qs=Ywefl8B65e4FIdY8OWfRQA%3D%3D) |
 | 1 | U4             | ESP32-S2 | [ESP32S2WROVERI4 (sma antenna)](https://reichelt.com/wifi-modul-802-11-bt-2-4-2-5ghz-150mb-s-esp32s2wroveri4-p311738.html)<br>***or***<br>[ESP32-S2-WROVER (pcb antenna)](https://reichelt.com/wifi-smd-module-esp32-s2-4-mb-spi-2mb-psram-18x31x3-3-mm-esp32-s2-wrover-p300188.html) | [ESP32-S2-WROVER-I (sma antenna)](https://mouser.com/ProductDetail/Espressif-Systems/ESP32-S2-WROVER-IM22S2H3216UH3Q0?qs=sGAEpiMZZMu3sxpa5v1qrl%2FYtpu2q02Iuga2xwvMqqs%3D)<br>***or***<br>[ESP32-S2-WROVER (pcb antenna)](https://mouser.com/ProductDetail/Espressif-Systems/ESP32-S2-WROVERM22S2H3216PH3Q0?qs=sGAEpiMZZMu3sxpa5v1qrl%2FYtpu2q02IcDxUAUeVSag%3D) |
+| 1 | Mode Header    | Header | [Header](https://www.reichelt.de/stiftleisten-2-54-mm-1x02-gerade-mpe-087-1-002-p119879.html?&trstct=pol_0&nbc=1)| - |
+| 1 | Mode Jumper    | Jumper | [Jumper](https://www.reichelt.de/kurzschlussbruecke-rot-mit-grifflasche-jumper-2-54gl-rt-p9018.html?&trstct=pol_0&nbc=1)| - |
 
 ---
 
@@ -87,5 +89,7 @@
 | 1 | U4             | ESP32-S2 | [ESP32S2WROVERI4 (sma antenna)](https://reichelt.com/wifi-modul-802-11-bt-2-4-2-5ghz-150mb-s-esp32s2wroveri4-p311738.html)<br>***or***<br>[ESP32-S2-WROVER (pcb antenna)](https://reichelt.com/wifi-smd-module-esp32-s2-4-mb-spi-2mb-psram-18x31x3-3-mm-esp32-s2-wrover-p300188.html) | [ESP32-S2-WROVER-I (sma antenna)](https://mouser.com/ProductDetail/Espressif-Systems/ESP32-S2-WROVER-IM22S2H3216UH3Q0?qs=sGAEpiMZZMu3sxpa5v1qrl%2FYtpu2q02Iuga2xwvMqqs%3D)<br>***or***<br>[ESP32-S2-WROVER (pcb antenna)](https://mouser.com/ProductDetail/Espressif-Systems/ESP32-S2-WROVERM22S2H3216PH3Q0?qs=sGAEpiMZZMu3sxpa5v1qrl%2FYtpu2q02IcDxUAUeVSag%3D) |
 | 1 | J5             | Micro Match SMD | [MPE 374-2-008](https://www.reichelt.de/buchsenleisten-micro-match-smd-1-27-mm-2x04-l-mpe-374-2-008-p120017.html?&trstct=pol_0&nbc=1) | |
 | 1 | J4             | BNO055 Connector | [2,54 mm, 1X08](https://www.reichelt.de/buchsenleisten-2-54-mm-1x08-gerade-mpe-094-1-008-p119917.html?&trstct=pol_0&nbc=1) | |
+| 1 | Mode Header    | Header | [Header](https://www.reichelt.de/stiftleisten-2-54-mm-1x02-gerade-mpe-087-1-002-p119879.html?&trstct=pol_0&nbc=1)| - |
+| 1 | Mode Jumper    | Jumper | [Jumper](https://www.reichelt.de/kurzschlussbruecke-rot-mit-grifflasche-jumper-2-54gl-rt-p9018.html?&trstct=pol_0&nbc=1)| - |
 
 
