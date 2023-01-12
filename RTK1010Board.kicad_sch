@@ -1713,7 +1713,6 @@
     )
   )
 
-
   (junction (at 256.54 157.48) (diameter 0) (color 0 0 0 0)
     (uuid 059a2ef1-e03a-4d79-b8ea-50b1a1c42f1b)
   )
@@ -3683,6 +3682,9 @@
     (property "Variant" "VarB" (id 4) (at 96.52 149.86 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "OrderURL" "https://www.reichelt.de/wifi-modul-802-11-bt-2-4-2-5ghz-150mb-s-esp32s2wroveri4-p311738.html?search=ESP32+S2+w" (id 5) (at 96.52 149.86 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid c2cec415-ebb4-404f-98d8-3088d01dd151))
     (pin "10" (uuid ea80ca14-8b16-4ffb-bf17-b1635074802c))
     (pin "11" (uuid 88ad63ef-a41f-4e91-a058-4cdf203a4629))
@@ -5058,7 +5060,7 @@
     (property "Footprint" "Connector_USB:USB_Micro-B_Amphenol_10118194_Horizontal" (id 2) (at 158.75 151.13 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "https://www.reichelt.de/usb-buchse-typ-micro-b-smd-gull-wing-mpe-712-1-s-bs0-p263308.html?&trstct=pol_1&nbc=1" (id 3) (at 158.75 151.13 0)
+    (property "Datasheet" "https://www.mouser.de/ProductDetail/Amphenol-FCI/10118194-0001LF?qs=Ywefl8B65e4FIdY8OWfRQA%3D%3D" (id 3) (at 158.75 151.13 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Variant" "VarB" (id 4) (at 162.56 149.86 0)
