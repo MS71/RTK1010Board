@@ -1,10 +1,12 @@
-RTK1010Board-backups
-out
-*~
-gerber
-#auto_saved_files#
-_autosave*
-*-bak
+kicad/*~
+kicad/gerber
+kicad/out
+kicad/RTK1010Board-backups
+
+# auto_saved_files #
+kicad/_autosave*
+kicad/*-bak
+
+esp32_fw/build
 esp32_fw/sdkconfig
 esp32_fw/sdkconfig.old
-esp32_fw/build
