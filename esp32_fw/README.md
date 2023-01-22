@@ -4,9 +4,15 @@
 
 ## Build
 . ~/workspace/esp32/esp-idf-v4.4/export.sh
+
 esp32_fw$ idf.py menuconfig
+
 esp32_fw$ idf.py build
+
 esp32_fw$ idf.py dfu
+
 connect BOOT to GND
+
 esp32_fw$ idf.py dfu-flash
+
 disconnect BOOT from GND and reset
