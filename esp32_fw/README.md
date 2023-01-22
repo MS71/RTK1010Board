@@ -1,6 +1,6 @@
 # RTK1010Board ESP32 Firmware
 ## Toolchain
-- [ESP32 Compiler](https://docs.espressif.com/projects/esp-idf/en/v4.4.3/esp32/get-started/index.html)
+- [ESP32 Compiler V4.4.* ](https://docs.espressif.com/projects/esp-idf/en/v4.4.3/esp32/get-started/index.html)
 
 ## Build
 . ~/workspace/esp32/esp-idf-v4.4/export.sh
