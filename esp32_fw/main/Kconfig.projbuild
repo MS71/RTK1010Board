@@ -1,5 +1,25 @@
 menu "RTK1010 Node Config"
 
+comment "WIFI Settings:"
+config WIFI_HOSTNAME
+	string "Wifi Hostname"
+	default "rtknode"
+
+config WIFI_SSID
+	string "Wifi SSID"
+	default ""
+
+config WIFI_PASSWORD
+	string "Wifi Password"
+	default ""
+
+config WIFI_RSSI_THRESHOLD
+    int "WiFi RSSI threshold to trigger roaming"
+    default 0
+    help
+        WiFi RSSI threshold to trigger roaming value in dbm (-100 to 0). 0 denotes feature is disabled.
+
+comment "HW Variant Settings:"
 choice
     prompt "HW Variant"
     default RTK1010_NODE_ROVER_NTRIP_CLIENT
@@ -17,23 +37,36 @@ choice
         bool "TCP Adapter (RTK-1010 <=> TCP Port)"
 endchoice
 
-config WIFI_RSSI_THRESHOLD
-    int "WiFi RSSI threshold to trigger roaming"
-    default 0
-    help
-        WiFi RSSI threshold to trigger roaming value in dbm (-100 to 0). 0 denotes feature is disabled.
+comment "Console Settings:"
+choice
+    prompt "Console"
+    default RTK1010_NODE_CONSOLE_DEFAULT
 
-config WIFI_HOSTNAME
-	string "Wifi Hostname"
-	default "rtknode"
+    config RTK1010_NODE_CONSOLE_DEFAULT
+        bool "Use ESP32 Default Console"
 
-config WIFI_SSID
-	string "Wifi SSID"
-	default ""
+    config RTK1010_NODE_CONSOLE_USB_ACM
+        bool "Use ESP32 USB ACM Console"
 
-config WIFI_PASSWORD
-	string "Wifi Password"
-	default ""
+    config RTK1010_NODE_CONSOLE_OFF
+        bool "Disable ESP32 Console"
+endchoice
+
+config RTK1010_NODE_CONSOLE_UDP
+    bool "Enable UDP Console"
+    
+if RTK1010_NODE_CONSOLE_UDP
+config RTK1010_NODE_CONSOLE_UDP_HOST
+	string "UDP Console Host"
+	default "devhostname"
+
+config RTK1010_NODE_CONSOLE_UDP_PORT
+	int "UDP Console Port"
+	default 42007
+endif
+
+if RTK1010_NODE_ROVER_NTRIP_CLIENT
+comment "NTRIP Settings:"
 
 config NTRIP_HOST
 	string "NTRIP Host"
@@ -54,5 +87,7 @@ config NTRIP_PASSWORD
 config NTRIP_MOUNTPOINT
 	string "NTRIP Mountpoint"
 	default "mountpoint"
+
+endif
 
 endmenu

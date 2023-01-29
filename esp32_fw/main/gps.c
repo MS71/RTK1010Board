@@ -40,7 +40,7 @@
 static const char* TAG = "gps";
 
 extern EventGroupHandle_t wifi_event_group;
-#define CONNECTED_BIT BIT0;
+#define CONNECTED_BIT BIT0
 
 uint8_t powerstate();
 
@@ -54,15 +54,15 @@ uint8_t powerstate();
 #define GPS_UART1_RXD 2
 #undef GPS_UART1_INV
 
-#ifdef RTK1010_NODE_ROVER_NTRIP_CLIENT
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
 #define ENABLE_NTRIP_CLIENT
 #endif
 
 uint8_t gps_uart_ready = 0;
 uint8_t gps_sapos_ready = 0;
 
-#define RXBUF_SIZE 1024
-uint8_t gps_rx_buffer[RXBUF_SIZE + 2];
+uint8_t gps_rx_buffer[256 + 2];
+uint8_t gps_tx_buffer[256 + 2];
 
 static void gps_uart_handle();
 
@@ -71,10 +71,13 @@ struct
     struct
     {
         nmea_gpgga_s gga;
+        uint rx_bytes;
+        uint tx_bytes;
+        uint rx_errors;
     } uart;
-#ifdef ENABLE_NTRIP_CLIENT    
     struct
     {
+#ifdef ENABLE_NTRIP_CLIENT    
         uint8_t needed;
         uint8_t reconnect;
         char host[48];
@@ -85,12 +88,14 @@ struct
         int64_t reconnect_timeout;
         esp_http_client_handle_t http;
         int64_t gga_send_timeout;
+#endif        
         int64_t gga_print_timeout;
+        uint ntrip_rx_bytes;
+#ifdef ENABLE_NTRIP_CLIENT    
         int64_t ntrip_data_timeout;
         char gga_line[256];
-        uint ntrip_rx_bytes;
-    } ntrip;
 #endif
+    } ntrip;
     struct
     {
         int listen_sock;
@@ -142,6 +147,7 @@ esp_err_t gps_ntrip_ev(esp_http_client_event_t* evt)
         if(uart_is_driver_installed(UART_NUM_1))
         {
             uart_write_bytes(UART_NUM_1, (const char*)evt->data, evt->data_len);
+            gps_md.uart.tx_bytes += evt->data_len;
         }
         break;
     case HTTP_EVENT_ON_FINISH:
@@ -250,9 +256,9 @@ static void ntrip_task(void* pvParameters)
 #if 0
             if(uart_is_driver_installed(UART_NUM_1))
             {
-                sprintf((char*)gps_rx_buffer, "$PESP,NTRIP,SRV,CONNECTED,%s:%d,%s", gps_md.ntrip.host,
+                sprintf((char*)gps_tx_buffer, "$PESP,NTRIP,SRV,CONNECTED,%s:%d,%s", gps_md.ntrip.host,
                     gps_md.ntrip.port, gps_md.ntrip.mountpoint);
-                uart_write_bytes(UART_NUM_1, (const char*)gps_rx_buffer, strlen((char*)gps_rx_buffer));
+                uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, strlen((char*)gps_tx_buffer));
             }
 #endif
 // RTK1010:
@@ -262,12 +268,12 @@ static void ntrip_task(void* pvParameters)
 #if 0
             if(uart_is_driver_installed(UART_NUM_1))
             {
-                sprintf((char*)gps_rx_buffer, "$PAIR050,100*22\r\n");
-                uart_write_bytes(UART_NUM_1, (const char*)gps_rx_buffer, strlen((char*)gps_rx_buffer));
+                sprintf((char*)gps_tx_buffer, "$PAIR050,100*22\r\n");
+                uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, strlen((char*)gps_tx_buffer));
                 sprintf((char*)gps_rx_buffer, "$PAIR070,5*24\r\n");
-                uart_write_bytes(UART_NUM_1, (const char*)gps_rx_buffer, strlen((char*)gps_rx_buffer));
+                uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, strlen((char*)gps_tx_buffer));
                 sprintf((char*)gps_rx_buffer, "$PLSC,FIXRATE,5*6C\r\n");
-                uart_write_bytes(UART_NUM_1, (const char*)gps_rx_buffer, strlen((char*)gps_rx_buffer));
+                uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, strlen((char*)gps_tx_buffer));
             }
 
 #endif
@@ -475,6 +481,7 @@ static void gps_tcpserv_handle()
                     setsockopt(gps_md.tcpserv.client_sock, IPPROTO_TCP, TCP_KEEPIDLE, &keepIdle, sizeof(int));
                     setsockopt(gps_md.tcpserv.client_sock, IPPROTO_TCP, TCP_KEEPINTVL, &keepInterval, sizeof(int));
                     setsockopt(gps_md.tcpserv.client_sock, IPPROTO_TCP, TCP_KEEPCNT, &keepCount, sizeof(int));
+                    setsockopt(gps_md.tcpserv.client_sock, IPPROTO_TCP, TCP_NODELAY, (int[]){1}, sizeof(int));
 
                     ESP_LOGI(TAG, "gps_tcpserv_handle ... connected");
                 }
@@ -485,7 +492,7 @@ static void gps_tcpserv_handle()
     if(gps_md.tcpserv.client_sock != 0)
     {
         int len = 0;
-        len = recv(gps_md.tcpserv.client_sock, gps_rx_buffer, RXBUF_SIZE, MSG_DONTWAIT);
+        len = recv(gps_md.tcpserv.client_sock, gps_tx_buffer, sizeof(gps_tx_buffer)-2, MSG_DONTWAIT);
 #if 0        
         if(len < 0)
         {
@@ -498,7 +505,8 @@ static void gps_tcpserv_handle()
         {
             if(uart_is_driver_installed(UART_NUM_1))
             {
-                uart_write_bytes(UART_NUM_1, (const char*)gps_rx_buffer, len);
+                uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, len);
+                gps_md.uart.tx_bytes += len;
             }
         }
     }
@@ -511,17 +519,24 @@ static void gps_tcpserv_handle()
  */
 static void gps_handle_nmea(int buflen, const char* buf)
 {
-    static char linebuf[512];
+    static char linebuf[256];
+    static char linebuf_bak[256];
     static int linebuf_used = 0;
     int i;
     for(i = 0; i < buflen; i++)
     {
-        if(linebuf_used >= sizeof(linebuf))
+        if(linebuf_used >= (sizeof(linebuf)-5))
         {
+            ESP_LOGW(TAG,"gps_handle_nmea() overflow");
             linebuf_used = 0;
+            gps_md.uart.rx_errors++;
         }
         linebuf[linebuf_used] = buf[i];
-        if((((unsigned char)buf[i]) >= 32) || (buf[i] == '\r'))
+        if( linebuf_used==0 && linebuf[0] != '$' )
+        {
+            // start with $
+        }
+        else if((((unsigned char)buf[i]) >= 32) /*|| (buf[i] == '\r') || (buf[i] == '\n')*/)
         {
             linebuf_used++;
         }
@@ -529,55 +544,76 @@ static void gps_handle_nmea(int buflen, const char* buf)
         {
             if(linebuf_used > 1)
             {
-                char linebuf_bak[sizeof(linebuf)] = {};
-                // ESP_LOGW(TAG,"F9P: %s", linebuf);
-
-                strncpy(linebuf_bak, linebuf, linebuf_used + 1);
-                if(linebuf_used >= 3)
+                int ok = 0;
+                linebuf[linebuf_used++] = '\r';
+                linebuf[linebuf_used++] = '\n';
+                linebuf[linebuf_used] = 0;
+                if(linebuf_used>4 && strstr(linebuf,"$PLSR") == linebuf )
+                {                  
+                    // RTK-1010 custom message
+                    ESP_LOGW(TAG,"GPS: %s", linebuf);
+                }                
+                if(linebuf_used>4 && strstr(linebuf,"$PAIR") == linebuf )
+                {                  
+                    // RTK-1010 custom message
+                    ESP_LOGW(TAG,"GPS: %s", linebuf);
+                }                
+                else if(nmea_validate(linebuf, linebuf_used, 1) == 0)
                 {
-                    if(linebuf[0] == '$' && linebuf[1] == 'G' && linebuf[2] == 'N')
-                    {
-                        linebuf[2] = 'P'; // check_checksum=0
-                    }
-                }
-                nmea_s* p = nmea_parse(linebuf, linebuf_used + 1, 0);
-                if(p != NULL)
-                {
-                    // ESP_LOGW(TAG, "%d %d %s", p->errors,p->type,linebuf);
-                    if(NMEA_GPGGA == p->type)
-                    {
-                        gps_md.uart.gga = *((nmea_gpgga_s*)p);
-
-#ifdef ENABLE_NTRIP_CLIENT    
-                        if(gps_md.ntrip.gga_print_timeout < esp_timer_get_time())
-                        {
-                            gps_md.ntrip.gga_print_timeout = esp_timer_get_time() + 3000000;
-                            ESP_LOGW(TAG, "fix=%d N=%d pos=(%d %f %d %f) ntrip-rx=%d", gps_md.uart.gga.position_fix,
-                                gps_md.uart.gga.n_satellites, gps_md.uart.gga.latitude.degrees,
-                                gps_md.uart.gga.latitude.minutes, gps_md.uart.gga.longitude.degrees,
-                                gps_md.uart.gga.longitude.minutes, gps_md.ntrip.ntrip_rx_bytes);
-                        }
-#endif                        
-
-                        if(gps_md.uart.gga.position_fix > 0)
-                        {
-#ifdef ENABLE_NTRIP_CLIENT    
-                            strncpy(gps_md.ntrip.gga_line, linebuf_bak, linebuf_used + 1);
-                            gps_md.ntrip.gga_line[linebuf_used + 1] = 0;
-#endif                            
-                            // ESP_LOGW(TAG, "XXX %s", gps_md.ntrip.gga_line);
-                            gps_ntrip_start();
-                        }
-                        else
-                        {
-                            gps_ntrip_stop();
-                        }
-                    }
-                    nmea_free(p);
+                    //ESP_LOGW(TAG,"GPS: ok: |%s|", linebuf);
+                    ok = 1;
                 }
                 else
                 {
-                    // ESP_LOGW(TAG, "error %s", linebuf);
+                    ESP_LOGW(TAG,"GPS: csum error: |%s|", linebuf);
+                    gps_md.uart.rx_errors++;
+                }
+                
+                if(ok == 1 && linebuf_used>6 && strstr(linebuf,"$GNGGA") == linebuf )
+                {                  
+                    strcpy(linebuf_bak,linebuf);
+                    //ESP_LOGW(TAG,"GPS: ok: |%s|", linebuf);
+                    linebuf[2]='P';
+                    nmea_s* p = nmea_parse(linebuf, linebuf_used, 0);
+                    if(p != NULL)
+                    {
+                        //ESP_LOGW(TAG, "%d %d %s", p->errors,p->type,linebuf);
+                        if(NMEA_GPGGA == p->type)
+                        {
+                            gps_md.uart.gga = *((nmea_gpgga_s*)p);
+
+                            if(gps_md.ntrip.gga_print_timeout < esp_timer_get_time())
+                            {
+                                //ESP_LOGW(TAG,"GPS: ok: |%s|", linebuf_bak);
+                                gps_md.ntrip.gga_print_timeout = esp_timer_get_time() + 3000000;
+                                ESP_LOGW(TAG,
+                                    "fix=%d N=%d pos=(%d %f %d %f) ntrip-rx=%d uart-tx=%d uart-rx=%d gps-errors=%d",
+                                    gps_md.uart.gga.position_fix, gps_md.uart.gga.n_satellites,
+                                    gps_md.uart.gga.latitude.degrees, gps_md.uart.gga.latitude.minutes,
+                                    gps_md.uart.gga.longitude.degrees, gps_md.uart.gga.longitude.minutes,
+                                    gps_md.ntrip.ntrip_rx_bytes, gps_md.uart.tx_bytes, gps_md.uart.rx_bytes,
+                                    gps_md.uart.rx_errors);
+                            }
+
+                            if(gps_md.uart.gga.position_fix > 0)
+                            {
+                                //if(strlen(gps_md.ntrip.gga_line) == 0)
+                                {
+#ifdef ENABLE_NTRIP_CLIENT
+                                    strncpy(gps_md.ntrip.gga_line, linebuf_bak, linebuf_used);
+                                    gps_md.ntrip.gga_line[linebuf_used] = 0;
+#endif
+                                    // ESP_LOGW(TAG, "XXX %s", gps_md.ntrip.gga_line);
+                                    gps_ntrip_start();
+                                }
+                            }
+                            else
+                            {
+                                gps_ntrip_stop();
+                            }
+                        }
+                        nmea_free(p);
+                    }
                 }
             }
             linebuf_used = 0;
@@ -630,7 +666,7 @@ static void gps_uart_start()
         intr_alloc_flags = ESP_INTR_FLAG_IRAM;
 #endif
 
-        uart_driver_install(UART_NUM_1, RXBUF_SIZE * 2, 0, 0, NULL, intr_alloc_flags);
+        uart_driver_install(UART_NUM_1, sizeof(gps_rx_buffer) * 10, 0, 0, NULL, intr_alloc_flags);
         uart_param_config(UART_NUM_1, &uart_config);
         uart_set_pin(UART_NUM_1, GPS_UART1_TXD, GPS_UART1_RXD, -1, -1);
 #ifdef GPS_UART1_INV
@@ -648,15 +684,14 @@ static void gps_uart_handle()
     if(uart_is_driver_installed(UART_NUM_1))
     {
         // ESP_LOGI(TAG, "gps_uart_handle");
-        int tout = (1 + (RXBUF_SIZE / (10 * 3)));
-        if(tout > 50)
-            tout = 20;
-        int len = uart_read_bytes(UART_NUM_1, gps_rx_buffer, RXBUF_SIZE, tout / portTICK_RATE_MS);
+        int len = uart_read_bytes(UART_NUM_1, gps_rx_buffer, (sizeof(gps_rx_buffer)-2), 10 / portTICK_RATE_MS);
         if(len > 0)
         {
+            gps_md.uart.rx_bytes += len;
             if(gps_md.tcpserv.client_sock != 0)
             {
                 send(gps_md.tcpserv.client_sock, gps_rx_buffer, len, 0);
+                //fflush(gps_md.tcpserv.client_sock);
             }
             gps_rx_buffer[len] = 0;
             //ESP_LOGW(TAG, "tx %d %s", len, gps_rx_buffer);
@@ -731,7 +766,7 @@ void gps_init()
         xTaskCreate(ntrip_task, "ntrip_task", 4096, NULL, 0, NULL);
     }
 #endif    
-    xTaskCreate(gps_task, "gps_task", 4096, NULL, 0, NULL);
+    xTaskCreate(gps_task, "gps_task", 4096, NULL, 1, NULL);
 }
 /**
  * @brief

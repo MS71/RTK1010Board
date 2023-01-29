@@ -5,6 +5,8 @@
 ## Build
 . ~/workspace/esp32/esp-idf-v4.4/export.sh
 
+esp32_fw$ idf.py set-target esp32s2
+
 esp32_fw$ idf.py menuconfig
 
 esp32_fw$ idf.py build
@@ -16,3 +18,8 @@ connect BOOT to GND
 esp32_fw$ idf.py dfu-flash
 
 disconnect BOOT from GND and reset
+
+cu -l /dev/ttyACM0 -s 115200
+
+## OTA
+curl 192.168.0.191:8032 --data-binary @- < build/rtknode.bin
