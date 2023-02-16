@@ -2,6 +2,14 @@
 
 ## Note regarding optional components:
 
+- U2 is the 5V to 3.3V LDO
+
+    If you like easy USB flashing of the ESP (only USB connected) U2 is required otherwise the ESP does not gets 3.3V power *(JP2 must be cloosed too)*.
+
+    The alternative flashing/power method is to supply 3.3V and solder your serial adapter to the uart probe points.
+
+    If U2 is populated the IOREF (3.3V) at the arduino pin header should not be connected !
+
 - C5 & U3 are required if the antenna requires more than 30mA LNA.
 
     This way you can supply up to 250mA LNA to active antennas.
@@ -30,7 +38,7 @@ If you like to tinker more with the board you may want to populate more 0805 100
 | 1 | BT1            | CR2032 holder | [KEYSTONE 1058](https://reichelt.com/button-cell-holder-for-1x-20mm-keystone-1058-p213351.html) | |
 | 1 | (BT1)          | CR2032 | [CR2032](https://reichelt.com/lithium-button-cell-battery-3-volt-210-mah-20-0x3-2-mm-cr-2032-p26550.html) | |
 | | **Optional:** |
-| 1 | U3             | 3.3V LDO  | [MCP 1700-3302](https://reichelt.com/ldo-fixed-voltage-regulator-3-3v-250ma-sot-23-3-pin-mcp-1700-3302-p200923.html) | |
+| 1 | U3             | GPS LNA 3.3V LDO  | [MCP 1700-3302](https://reichelt.com/ldo-fixed-voltage-regulator-3-3v-250ma-sot-23-3-pin-mcp-1700-3302-p200923.html) | |
 | 1 | C6             | 0805 capacitor 100nF/50V | [KEM Z5U0805 100N](https://reichelt.com/multi-layer-ceramic-capacitor-100nf-50v-85-c-kem-z5u0805-100n-p207084.html) | |
 ||
 | 2 | C10            | tantalum 100µF/6.3V | [T491B 100U 6](https://reichelt.com/smd-tantalum-100-f-10-6-3v-case-b-125-c-ve-2000-t491b-100u-6-p206458.html) | |
@@ -63,7 +71,7 @@ If you like to tinker more with the board you may want to populate more 0805 100
 | 1 | TP_BOOT1/TP_GND1 | ESP boot header | [Header](https://reichelt.com/pin-headers-2-54-mm-1x02-straight-mpe-087-1-002-p119879.html)| |
 | 1 |                | ESP boot jumper | [Jumper](https://reichelt.com/jumper-red-with-lug-jumper-2-54gl-rt-p9018.html)| |
 | | **Optional:** |
-| 1 | U3             | 3.3V LDO  | [MCP 1700-3302](https://reichelt.com/ldo-fixed-voltage-regulator-3-3v-250ma-sot-23-3-pin-mcp-1700-3302-p200923.html) | |
+| 1 | U3             | GPS LNA 3.3V LDO  | [MCP 1700-3302](https://reichelt.com/ldo-fixed-voltage-regulator-3-3v-250ma-sot-23-3-pin-mcp-1700-3302-p200923.html) | |
 | 1 | C6             | 0805 capacitor 100nF/50V | [KEM Z5U0805 100N](https://reichelt.com/multi-layer-ceramic-capacitor-100nf-50v-85-c-kem-z5u0805-100n-p207084.html) | |
 ||
 | 2 | C10            | tantalum 100µF/6.3V | [T491B 100U 6](https://reichelt.com/smd-tantalum-100-f-10-6-3v-case-b-125-c-ve-2000-t491b-100u-6-p206458.html) | |
@@ -97,7 +105,10 @@ If you like to tinker more with the board you may want to populate more 0805 100
 | 1 | TP_BOOT1/TP_GND1 | ESP boot header | [Header](https://reichelt.com/pin-headers-2-54-mm-1x02-straight-mpe-087-1-002-p119879.html)| |
 | 1 |                | ESP boot jumper | [Jumper](https://reichelt.com/jumper-red-with-lug-jumper-2-54gl-rt-p9018.html)| |
 | | **Optional:** |
-| 1 | U3             | 3.3V LDO  | [MCP 1700-3302](https://reichelt.com/ldo-fixed-voltage-regulator-3-3v-250ma-sot-23-3-pin-mcp-1700-3302-p200923.html) | |
+| 1 | U2             | 3.3V LDO | [NCP 1117 ST33T3G](https://reichelt.com/ldo-voltage-regulator-3-3vdc-sot-223-ncp-1117-st33t3g-p188925.html) | |
+| 1 | J3             | USB socket | :x: | [649-10118194-0001LF](https://eu.mouser.com/ProductDetail/Amphenol-FCI/10118194-0001LF?qs=Ywefl8B65e4FIdY8OWfRQA%3D%3D) |
+||
+| 1 | U3             | GPS LNA 3.3V LDO  | [MCP 1700-3302](https://reichelt.com/ldo-fixed-voltage-regulator-3-3v-250ma-sot-23-3-pin-mcp-1700-3302-p200923.html) | |
 | 1 | C6             | 0805 capacitor 100nF/50V | [KEM Z5U0805 100N](https://reichelt.com/multi-layer-ceramic-capacitor-100nf-50v-85-c-kem-z5u0805-100n-p207084.html) | |
 ||
 | 2 | C10            | tantalum 100µF/6.3V | [T491B 100U 6](https://reichelt.com/smd-tantalum-100-f-10-6-3v-case-b-125-c-ve-2000-t491b-100u-6-p206458.html) | |
