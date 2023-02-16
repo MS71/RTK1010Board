@@ -8,5 +8,6 @@ kicad/_autosave*
 kicad/*-bak
 
 esp32_fw/build
+esp32_fw/dependencies.lock
 esp32_fw/sdkconfig
 esp32_fw/sdkconfig.old
