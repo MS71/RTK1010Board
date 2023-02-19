@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "./"
+		},
+		{
+			"path": "./esp32_fw"
+		}
+	],
+	"settings": {}
+}
