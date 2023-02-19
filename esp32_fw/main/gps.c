@@ -118,7 +118,7 @@ typedef struct
 GPSLoggerType gps_logger[1] = {};
 
 /**
- * @brief 
+ * @brief calculate a RTCM message parity value 
  * @param Crc
  * @param Size
  * @param Buffer
@@ -142,7 +142,13 @@ uint32_t rtcm_parity(uint32_t Crc, uint32_t Size, uint8_t* Buffer) // sourcer32@
     return (Crc & 0xFFFFFF); // Mask to 24-bit, as above optimized for 32-bit
 }
 
-void rtcm_filter(uint32_t rtcm_type, uint16_t rtcm_bytes, uint8_t* rtcm_msg)
+/**
+ * @brief 
+ * @param rtcm_type
+ * @param rtcm_bytes
+ * @param rtcm_msg
+ */
+void rtcm_message_filter(uint32_t rtcm_type, uint16_t rtcm_bytes, uint8_t* rtcm_msg)
 {
     if(rtcm_bytes >= 8)
     {
@@ -162,13 +168,14 @@ void rtcm_filter(uint32_t rtcm_type, uint16_t rtcm_bytes, uint8_t* rtcm_msg)
         }
     }
 }
+
 /**
  * @brief 
  * @param l
  * @param data_len
  * @param data
  */
-void rtcm_logger(GPSLoggerType* l, uint data_len, uint8_t* data)
+void rtcm_message_parser(GPSLoggerType* l, uint data_len, uint8_t* data)
 {
     // https://singularxyz.com/471.html
     int i;
@@ -195,7 +202,7 @@ void rtcm_logger(GPSLoggerType* l, uint data_len, uint8_t* data)
         {
             if( data[i] < 32 )
             {
-                ESP_LOGI(TAG, "rtcm_logger() NMEA %d [%s]",l->msg_idx,(char*)(l->msg_buf));
+                ESP_LOGI(TAG, "rtcm_message_parser() NMEA %d [%s]",l->msg_idx,(char*)(l->msg_buf));
                 l->state = STATE_IDLE;
             }
             else if( l->msg_idx < (sizeof(l->msg_buf)-1) )
@@ -234,7 +241,7 @@ void rtcm_logger(GPSLoggerType* l, uint data_len, uint8_t* data)
             }
             else
             {
-                ESP_LOGI(TAG, "rtcm_logger() error #3 state=%d", l->state);
+                ESP_LOGI(TAG, "rtcm_message_parser() error #3 state=%d", l->state);
                 l->state = STATE_IDLE;
             }
             l->msg_idx++;
@@ -243,22 +250,27 @@ void rtcm_logger(GPSLoggerType* l, uint data_len, uint8_t* data)
             {
                 uint32_t crc = rtcm_parity(0x00000000, l->rtcm_len, l->msg_buf);
                 uint32_t type = ((l->msg_buf[3] << 4) | l->msg_buf[4] >> 4);
-                //ESP_LOGI(TAG, "rtcm_logger() RTCM len=0x%04x crc=0x%08x type=%d", l->rtcm_len - 6, crc, type);
+                //ESP_LOGI(TAG, "rtcm_message_parser() RTCM len=0x%04x crc=0x%08x type=%d", l->rtcm_len - 6, crc, type);
                 l->state = STATE_IDLE;
                 if( crc == 0 )
                 {
-                    rtcm_filter(type,l->rtcm_len,l->msg_buf);
+                    rtcm_message_filter(type,l->rtcm_len,l->msg_buf);
                 }
             }
         }
         else
         {
-            ESP_LOGI(TAG, "rtcm_logger() error #1 state=%d", l->state);
+            ESP_LOGI(TAG, "rtcm_message_parser() error #1 state=%d", l->state);
             l->state = STATE_IDLE;
         }
     }
 }
 
+/**
+ * @brief 
+ * @param cmd
+ * @return 
+ */
 int gps_nmea_csum(const char* cmd)
 {
     if(cmd[0] == '$')
@@ -284,6 +296,11 @@ int gps_nmea_csum(const char* cmd)
     return 0;
 }
 
+/**
+ * @brief 
+ * @param line
+ * @return 
+ */
 int gps_nmea_ok(char* line)
 {
     if(line != NULL)
@@ -427,7 +444,7 @@ esp_err_t gps_ntrip_ev(esp_http_client_event_t* evt)
 #endif
         if(uart_is_driver_installed(UART_NUM_1))
         {
-            rtcm_logger(&gps_logger[0],evt->data_len,(uint8_t*)evt->data);
+            rtcm_message_parser(&gps_logger[0],evt->data_len,(uint8_t*)evt->data);
         }
         break;
     case HTTP_EVENT_ON_FINISH:
@@ -840,7 +857,7 @@ static void gps_handle_nmea(int buflen, const char* buf)
                                 gps_md.uart.position_fix,
                                 gps_nmea_get_int(linebuf,7,0),
                                 gps_nmea_get_float(linebuf,2),
-                                gps_nmea_get_float(linebuf,3),
+                                gps_nmea_get_float(linebuf,4),
                                 gps_md.ntrip.ntrip_rx_bytes, gps_md.uart.tx_bytes,gps_md.uart.rx_bytes, gps_md.uart.rx_errors);
                         }
 
@@ -1019,3 +1036,6 @@ void gps_init()
 void gps_exit()
 {
 }
+
+/* EOF
+ */
