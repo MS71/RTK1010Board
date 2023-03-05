@@ -39,7 +39,8 @@ extern EventGroupHandle_t wifi_event_group;
 
 uint8_t powerstate();
 
-#define PORT 20000
+#define TCPSERV_PORT        20000
+#define RTCMTCPSERV_PORT    2101
 
 #define KEEPALIVE_IDLE 5
 #define KEEPALIVE_INTERVAL 5
@@ -48,10 +49,6 @@ uint8_t powerstate();
 #define GPS_UART1_TXD 1
 #define GPS_UART1_RXD 2
 #undef GPS_UART1_INV
-
-#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
-#define ENABLE_NTRIP_CLIENT
-#endif
 
 uint8_t gps_uart_ready = 0;
 uint8_t gps_sapos_ready = 0;
@@ -73,7 +70,7 @@ struct
     } uart;
     struct
     {
-#ifdef ENABLE_NTRIP_CLIENT    
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
         uint8_t needed;
         uint8_t reconnect;
         char host[48];
@@ -87,7 +84,7 @@ struct
 #endif        
         int64_t gga_print_timeout;
         uint ntrip_rx_bytes;
-#ifdef ENABLE_NTRIP_CLIENT    
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
         int64_t ntrip_data_timeout;
         char gga_line[256];
 #endif
@@ -97,6 +94,13 @@ struct
         int listen_sock;
         int client_sock;
     } tcpserv;
+#ifdef CONFIG_RTK1010_NODE_BASE_RTCM_SERVER
+    struct
+    {
+        int listen_sock;
+        int client_sock;
+    } rtcmtcpserv;
+#endif
 } gps_md = {};
 
 static void gps_tcpserv_handle();
@@ -404,7 +408,7 @@ void gps_nmea_send(const char* cmd)
     }
 }
 
-#ifdef ENABLE_NTRIP_CLIENT    
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
 /**
  * @brief
  * @param evt
@@ -624,22 +628,170 @@ static void ntrip_task(void* pvParameters)
 /**
  * @brief
  */
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
 void gps_ntrip_start()
 {
-#ifdef ENABLE_NTRIP_CLIENT    
     gps_md.ntrip.needed = 1;
+}
 #endif    
+
+/**
+ * @brief
+ */
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
+void gps_ntrip_stop()
+{
+    gps_md.ntrip.needed = 0;
+}
+#endif
+
+#ifdef CONFIG_RTK1010_NODE_BASE_RTCM_SERVER
+/**
+ * @brief
+ */
+static void gps_rtcmtcpserv_stop()
+{
+    if(gps_md.rtcmtcpserv.client_sock != 0)
+    {
+        close(gps_md.rtcmtcpserv.client_sock);
+        gps_md.rtcmtcpserv.client_sock = 0;
+    }
+    if(gps_md.rtcmtcpserv.listen_sock != 0)
+    {
+        close(gps_md.rtcmtcpserv.listen_sock);
+        gps_md.rtcmtcpserv.listen_sock = 0;
+    }
 }
 
 /**
  * @brief
  */
-void gps_ntrip_stop()
+static void gps_rtcmtcpserv_start()
 {
-#ifdef ENABLE_NTRIP_CLIENT    
-    gps_md.ntrip.needed = 0;
-#endif
+    if(gps_md.rtcmtcpserv.listen_sock == 0)
+    {
+        ESP_LOGI(TAG, "gps_rtcmtcpserv_start ...");
+
+        struct sockaddr_in6 destAddr;
+        int ip_protocol;
+        int addr_family;
+        char addr_str[128];
+        bzero(&destAddr.sin6_addr.un, sizeof(destAddr.sin6_addr.un));
+        destAddr.sin6_family = AF_INET6;
+        destAddr.sin6_port = htons(RTCMTCPSERV_PORT);
+        addr_family = AF_INET6;
+        ip_protocol = IPPROTO_IPV6;
+        inet6_ntoa_r(destAddr.sin6_addr, addr_str, sizeof(addr_str) - 1);
+
+        gps_md.rtcmtcpserv.listen_sock = socket(addr_family, SOCK_STREAM, ip_protocol);
+        if(gps_md.rtcmtcpserv.listen_sock < 0)
+        {
+            ESP_LOGE(TAG, "gps_rtcmtcpserv_start unable to create socket: errno %d", errno);
+            gps_rtcmtcpserv_stop();
+            return;
+        }
+
+        int err = bind(gps_md.rtcmtcpserv.listen_sock, (struct sockaddr*)&destAddr, sizeof(destAddr));
+        if(err != 0)
+        {
+            ESP_LOGE(TAG, "gps_rtcmtcpserv_start socket unable to bind: errno %d", errno);
+            gps_rtcmtcpserv_stop();
+            return;
+        }
+
+        err = listen(gps_md.rtcmtcpserv.listen_sock, 1);
+        if(err != 0)
+        {
+            ESP_LOGE(TAG, "gps_rtcmtcpserv_start Error during listen: errno %d", errno);
+            gps_rtcmtcpserv_stop();
+            return;
+        }
+
+        ESP_LOGI(TAG, "gps_rtcmtcpserv_start ... ok");
+    }
 }
+
+/**
+ * @brief
+ */
+static void gps_rtcmtcpserv_handle()
+{
+    if(gps_md.rtcmtcpserv.listen_sock == 0)
+    {
+        gps_rtcmtcpserv_start();
+    }
+
+    if(gps_md.rtcmtcpserv.listen_sock != 0)
+    {
+        if(gps_md.rtcmtcpserv.client_sock == 0)
+        {
+            // ESP_LOGI(TAG, "gps_tcpserv_handle ...");
+
+            fd_set rfds;
+            struct timeval tv;
+            int retval;
+            FD_ZERO(&rfds);
+            FD_SET(gps_md.rtcmtcpserv.listen_sock, &rfds);
+            tv.tv_sec = 0;
+            tv.tv_usec = 1000;
+            retval = select(gps_md.rtcmtcpserv.listen_sock + 1, &rfds, NULL, NULL, &tv);
+
+            if(retval == -1)
+            {
+                perror("select()");
+                //gps_tcpserv_stop();
+            }
+            else if(retval)
+            {
+                ESP_LOGI(TAG, "gps_rtcmtcpserv_handle ... ...");
+
+                struct sockaddr_in6 sourceAddr; // Large enough for both IPv4 or IPv6
+                uint addrLen = sizeof(sourceAddr);
+                gps_md.rtcmtcpserv.client_sock =
+                    accept(gps_md.rtcmtcpserv.listen_sock, (struct sockaddr*)&sourceAddr, &addrLen);
+
+                if(gps_md.rtcmtcpserv.client_sock > 0)
+                {
+                    int keepAlive = 1;
+                    int keepIdle = KEEPALIVE_IDLE;
+                    int keepInterval = KEEPALIVE_INTERVAL;
+                    int keepCount = KEEPALIVE_COUNT;
+                    setsockopt(gps_md.rtcmtcpserv.client_sock, SOL_SOCKET, SO_KEEPALIVE, &keepAlive, sizeof(int));
+                    setsockopt(gps_md.rtcmtcpserv.client_sock, IPPROTO_TCP, TCP_KEEPIDLE, &keepIdle, sizeof(int));
+                    setsockopt(gps_md.rtcmtcpserv.client_sock, IPPROTO_TCP, TCP_KEEPINTVL, &keepInterval, sizeof(int));
+                    setsockopt(gps_md.rtcmtcpserv.client_sock, IPPROTO_TCP, TCP_KEEPCNT, &keepCount, sizeof(int));
+                    setsockopt(gps_md.rtcmtcpserv.client_sock, IPPROTO_TCP, TCP_NODELAY, (int[]){1}, sizeof(int));
+
+                    ESP_LOGI(TAG, "gps_rtcmtcpserv_handle ... connected");
+                }
+            }
+        }
+    }
+
+    if(gps_md.rtcmtcpserv.client_sock != 0)
+    {
+        int len = 0;
+        len = recv(gps_md.rtcmtcpserv.client_sock, gps_tx_buffer, sizeof(gps_tx_buffer)-2, MSG_DONTWAIT);
+        if(len > 0)
+        {
+#if 0
+            if(uart_is_driver_installed(UART_NUM_1))
+            {
+                //ESP_LOGE(TAG,"TX.GPS:%s",gps_tx_buffer);
+                uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, len);
+                gps_md.uart.tx_bytes += len;
+            }
+#endif    
+        }    
+        else if(len < 0 && errno != EAGAIN)
+        {
+            ESP_LOGI(TAG, "gps_rtcmtcpserv_handle ... disconnected errno=%d",errno);
+            close(gps_md.rtcmtcpserv.client_sock);
+            gps_md.rtcmtcpserv.client_sock = 0;
+        }
+    }
+}
+#endif
 
 /**
  * @brief
@@ -673,7 +825,7 @@ static void gps_tcpserv_start()
         char addr_str[128];
         bzero(&destAddr.sin6_addr.un, sizeof(destAddr.sin6_addr.un));
         destAddr.sin6_family = AF_INET6;
-        destAddr.sin6_port = htons(PORT);
+        destAddr.sin6_port = htons(TCPSERV_PORT);
         addr_family = AF_INET6;
         ip_protocol = IPPROTO_IPV6;
         inet6_ntoa_r(destAddr.sin6_addr, addr_str, sizeof(addr_str) - 1);
@@ -681,16 +833,15 @@ static void gps_tcpserv_start()
         gps_md.tcpserv.listen_sock = socket(addr_family, SOCK_STREAM, ip_protocol);
         if(gps_md.tcpserv.listen_sock < 0)
         {
-            ESP_LOGE(TAG, "Unable to create socket: errno %d", errno);
+            ESP_LOGE(TAG, "gps_tcpserv_start Unable to create socket: errno %d", errno);
             gps_tcpserv_stop();
             return;
         }
-        ESP_LOGI(TAG, "Socket created");
 
         int err = bind(gps_md.tcpserv.listen_sock, (struct sockaddr*)&destAddr, sizeof(destAddr));
         if(err != 0)
         {
-            ESP_LOGE(TAG, "Socket unable to bind: errno %d", errno);
+            ESP_LOGE(TAG, "gps_tcpserv_start Socket unable to bind: errno %d", errno);
             gps_tcpserv_stop();
             return;
         }
@@ -698,7 +849,7 @@ static void gps_tcpserv_start()
         err = listen(gps_md.tcpserv.listen_sock, 1);
         if(err != 0)
         {
-            ESP_LOGE(TAG, "Error during listen: errno %d", errno);
+            ESP_LOGE(TAG, "gps_tcpserv_start Error during listen: errno %d", errno);
             gps_tcpserv_stop();
             return;
         }
@@ -706,6 +857,7 @@ static void gps_tcpserv_start()
         ESP_LOGI(TAG, "gps_tcpserv_start ... ok");
     }
 }
+
 /**
  * @brief
  */
@@ -775,6 +927,12 @@ static void gps_tcpserv_handle()
                 uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, len);
                 gps_md.uart.tx_bytes += len;
             }
+        }        
+        else if(len < 0 && errno != EAGAIN)
+        {
+            ESP_LOGI(TAG, "gps_tcpserv_handle ... disconnected errno=%d",errno);
+            close(gps_md.tcpserv.client_sock);
+            gps_md.tcpserv.client_sock = 0;
         }
     }
 }
@@ -820,10 +978,9 @@ static void gps_handle_nmea(int buflen, const char* buf)
                     linebuf[linebuf_used-1] = 0;
                     ESP_LOGE(TAG,"RX.RTK-1010: {%s} !!! RESTART !!! init sequence ...",linebuf);
                     gps_nmea_send("$PLSC,VER*"); // request firmware version
-#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
+#if defined(CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT) || defined(CONFIG_RTK1010_NODE_ROVER_RTCM_CLIENT)
                     gps_nmea_send("$PLSC,MCBASE,0*"); // Set up the board as a rover(default)
-#endif
-#ifdef CONFIG_RTK1010_NODE_BASE_NTRIP_CASTER
+#elif defined(CONFIG_RTK1010_NODE_BASE_RTCM_SERVER)
                     gps_nmea_send("$PLSC,MCBASE,1*"); // Set up the board as a caster
 #endif
                     // gps_nmea_send("$PLSC,FIXRATE,5*"); // Set up the board as a rover(default)
@@ -863,11 +1020,13 @@ static void gps_handle_nmea(int buflen, const char* buf)
 
                         if(gps_md.uart.position_fix >= 1)
                         {
-#ifdef ENABLE_NTRIP_CLIENT
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
                             strncpy(gps_md.ntrip.gga_line, linebuf_bak, linebuf_used);
                             gps_md.ntrip.gga_line[linebuf_used] = 0;
 #endif
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
                             gps_ntrip_start();
+#endif                            
                         }
                     }                    
                 }
@@ -933,6 +1092,7 @@ static void gps_uart_start()
         gps_md.uart.initflag = 1;
     }
 }
+
 /**
  * @brief
  */
@@ -957,6 +1117,13 @@ static void gps_uart_handle()
                 send(gps_md.tcpserv.client_sock, gps_rx_buffer, len, 0);
                 //fflush(gps_md.tcpserv.client_sock);
             }
+#ifdef CONFIG_RTK1010_NODE_BASE_RTCM_SERVER            
+            if(gps_md.rtcmtcpserv.client_sock != 0)
+            {
+                send(gps_md.rtcmtcpserv.client_sock, gps_rx_buffer, len, 0);
+                //fflush(gps_md.tcpserv.client_sock);
+            }
+#endif            
             gps_rx_buffer[len] = 0;
             //ESP_LOGW(TAG, "tx %d %s", len, gps_rx_buffer);
             gps_handle_nmea(len, (const char*)gps_rx_buffer);
@@ -987,6 +1154,9 @@ static void gps_task(void* pvParameters)
         ESP_LOGI(TAG, "Starting ... ");
         gps_uart_start();
         gps_tcpserv_start();
+#ifdef CONFIG_RTK1010_NODE_BASE_RTCM_SERVER
+        gps_rtcmtcpserv_start();
+#endif        
 
         while(true)
         {
@@ -997,10 +1167,17 @@ static void gps_task(void* pvParameters)
 
             gps_uart_handle();
             gps_tcpserv_handle();
-            // gps_ntrip_handle();
+#ifdef CONFIG_RTK1010_NODE_BASE_RTCM_SERVER
+            gps_rtcmtcpserv_handle();
+#endif        
         }
 
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
         gps_ntrip_stop();
+#endif
+#ifdef CONFIG_RTK1010_NODE_BASE_RTCM_SERVER
+        gps_rtcmtcpserv_stop();
+#endif        
         gps_tcpserv_stop();
         gps_uart_stop();
         vTaskDelete(NULL);
@@ -1012,7 +1189,7 @@ static void gps_task(void* pvParameters)
  */
 void gps_init()
 {
-#ifdef ENABLE_NTRIP_CLIENT    
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
     strcpy(gps_md.ntrip.host, CONFIG_NTRIP_HOST);
     gps_md.ntrip.port = CONFIG_NTRIP_PORT;
     strcpy(gps_md.ntrip.username, CONFIG_NTRIP_USERNAME);

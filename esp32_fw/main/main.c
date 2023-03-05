@@ -102,6 +102,10 @@ int con_udp_log(const char* format, va_list args)
 }
 #endif
 
+#ifdef CONFIG_RTK1010_NODE_CDC_ADAPTER
+#error not implemented yet
+#endif
+
 /**
  * @brief 
  */

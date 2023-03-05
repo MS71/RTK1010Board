@@ -1,6 +1,10 @@
 menu "RTK1010 Node Config"
 
-comment "WIFI Settings:"
+###
+###
+###
+menu "WIFI Settings"
+
 config WIFI_HOSTNAME
 	string "Wifi Hostname"
 	default "rtknode"
@@ -18,26 +22,13 @@ config WIFI_RSSI_THRESHOLD
     default 0
     help
         WiFi RSSI threshold to trigger roaming value in dbm (-100 to 0). 0 denotes feature is disabled.
+endmenu
 
-comment "HW Variant Settings:"
-choice
-    prompt "HW Variant"
-    default RTK1010_NODE_ROVER_NTRIP_CLIENT
+###
+###
+###
+menu "Console Settings"
 
-    config RTK1010_NODE_ROVER_NTRIP_CLIENT
-        bool "Rover NTRIP Client"
-
-    config RTK1010_NODE_BASE_NTRIP_CASTER
-        bool "Base NTRIP Caster"
-
-      config RTK1010_NODE_SERIAL_ADAPTER
-        bool "Serial Adapter (RTK-1010 <=> USBSerial)"
-
-    config RTK1010_NODE_TCP_ADAPTER
-        bool "TCP Adapter (RTK-1010 <=> TCP Port)"
-endchoice
-
-comment "Console Settings:"
 choice
     prompt "Console"
     default RTK1010_NODE_CONSOLE_DEFAULT
@@ -56,6 +47,7 @@ config RTK1010_NODE_CONSOLE_UDP
     bool "Enable UDP Console"
     
 if RTK1010_NODE_CONSOLE_UDP
+
 config RTK1010_NODE_CONSOLE_UDP_HOST
 	string "UDP Console Host"
 	default "devhostname"
@@ -63,10 +55,54 @@ config RTK1010_NODE_CONSOLE_UDP_HOST
 config RTK1010_NODE_CONSOLE_UDP_PORT
 	int "UDP Console Port"
 	default 42007
+
+endif
+endmenu
+
+###
+###
+###
+choice
+    prompt "Node Variant"
+    default RTK1010_NODE_ROVER_NTRIP_CLIENT
+
+    config RTK1010_NODE_ROVER_NTRIP_CLIENT
+        bool "Rover NTRIP Client"
+
+    config RTK1010_NODE_ROVER_RTCM_CLIENT
+        bool "Rover RTCM TCP Client"
+
+    config RTK1010_NODE_BASE_RTCM_SERVER
+        bool "Base RTCM TCP Server"
+
+    config RTK1010_NODE_TCP_ADAPTER
+        bool "TCP Adapter/Server (RTK-1010 <=> TCP Port)"
+
+    config RTK1010_NODE_CDC_ADAPTER
+        bool "CDC Adapter (RTK-1010 <=> USB-Serial)"
+endchoice
+
+
+###
+###
+###
+if RTK1010_NODE_BASE_RTCM_SERVER
+menu "RTCM/TCP Server Settings"
+
+config BASE_RTCM_SERVER_PORT
+	int "RTCM/TCP Port"
+	default 2101
+    
+endmenu
+
 endif
 
+###
+###
+###
 if RTK1010_NODE_ROVER_NTRIP_CLIENT
-comment "NTRIP Settings:"
+
+menu "NTRIP Client Settings"
 
 config NTRIP_HOST
 	string "NTRIP Host"
@@ -87,6 +123,8 @@ config NTRIP_PASSWORD
 config NTRIP_MOUNTPOINT
 	string "NTRIP Mountpoint"
 	default "mountpoint"
+
+endmenu
 
 endif
 
