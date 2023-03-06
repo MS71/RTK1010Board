@@ -128,4 +128,42 @@ endmenu
 
 endif
 
+###
+###
+###
+if RTK1010_NODE_BASE_RTCM_SERVER
+
+menu "RTCM Server Settings"
+
+config RTCM_PORT
+	int "RTCM Port"
+	default 2101
+
+endmenu
+
+endif
+
+###
+###
+###
+if RTK1010_NODE_ROVER_RTCM_CLIENT
+
+menu "RTCM Client Settings"
+
+config RTCM_HOST
+	string "RTCM Host"
+	default "ntrip host"
+
+config RTCM_PORT
+	int "RTCM Port"
+	default 2101
+
+endmenu
+
+endif
+
+###
+###
+###
+
 endmenu

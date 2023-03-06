@@ -39,8 +39,7 @@ extern EventGroupHandle_t wifi_event_group;
 
 uint8_t powerstate();
 
-#define TCPSERV_PORT        20000
-#define RTCMTCPSERV_PORT    2101
+#define TCPSERV_PORT 20000
 
 #define KEEPALIVE_IDLE 5
 #define KEEPALIVE_INTERVAL 5
@@ -70,7 +69,7 @@ struct
     } uart;
     struct
     {
-#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
         uint8_t needed;
         uint8_t reconnect;
         char host[48];
@@ -81,10 +80,10 @@ struct
         int64_t reconnect_timeout;
         esp_http_client_handle_t http;
         int64_t gga_send_timeout;
-#endif        
+#endif
         int64_t gga_print_timeout;
         uint ntrip_rx_bytes;
-#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
         int64_t ntrip_data_timeout;
         char gga_line[256];
 #endif
@@ -101,6 +100,13 @@ struct
         int client_sock;
     } rtcmtcpserv;
 #endif
+#ifdef CONFIG_RTK1010_NODE_ROVER_RTCM_CLIENT
+    struct
+    {
+        int client_sock;
+        int64_t reconnect_timeout;
+    } rtcmtcpclient;
+#endif
 } gps_md = {};
 
 static void gps_tcpserv_handle();
@@ -110,7 +116,8 @@ typedef struct
 {
     uint8_t msg_buf[512];
     uint16_t msg_idx;
-    enum {
+    enum
+    {
         STATE_IDLE = 0,
         STATE_NMEA_START,
         STATE_RTCM3_LEN0,
@@ -122,11 +129,11 @@ typedef struct
 GPSLoggerType gps_logger[1] = {};
 
 /**
- * @brief calculate a RTCM message parity value 
+ * @brief calculate a RTCM message parity value
  * @param Crc
  * @param Size
  * @param Buffer
- * @return 
+ * @return
  */
 uint32_t rtcm_parity(uint32_t Crc, uint32_t Size, uint8_t* Buffer) // sourcer32@gmail.com
 {
@@ -147,7 +154,7 @@ uint32_t rtcm_parity(uint32_t Crc, uint32_t Size, uint8_t* Buffer) // sourcer32@
 }
 
 /**
- * @brief 
+ * @brief
  * @param rtcm_type
  * @param rtcm_bytes
  * @param rtcm_msg
@@ -159,7 +166,7 @@ void rtcm_message_filter(uint32_t rtcm_type, uint16_t rtcm_bytes, uint8_t* rtcm_
 #if 0        
         if((rtcm_type == 1005) || (rtcm_type == 1074) || (rtcm_type == 1084) || (rtcm_type == 1094) ||
             (rtcm_type == 1114) || (rtcm_type == 1124))
-#endif                
+#endif
         {
 #if 0
             ESP_LOGW(TAG, "rtcm_filter() RTCM type=%d %02x%02x%02x%02x%02x...%02x%02x", 
@@ -174,7 +181,7 @@ void rtcm_message_filter(uint32_t rtcm_type, uint16_t rtcm_bytes, uint8_t* rtcm_
 }
 
 /**
- * @brief 
+ * @brief
  * @param l
  * @param data_len
  * @param data
@@ -183,51 +190,51 @@ void rtcm_message_parser(GPSLoggerType* l, uint data_len, uint8_t* data)
 {
     // https://singularxyz.com/471.html
     int i;
-    for(i=0;i<data_len;i++)
+    for(i = 0; i < data_len; i++)
     {
-        if( l->state == STATE_IDLE )
+        if(l->state == STATE_IDLE)
         {
-            if( (char)data[i] == '$' )
+            if((char)data[i] == '$')
             {
                 l->state = STATE_NMEA_START;
                 l->msg_idx = 0;
                 l->msg_buf[l->msg_idx++] = data[i];
                 l->msg_buf[l->msg_idx] = 0;
             }
-            else if( data[i] == 0xd3 )
+            else if(data[i] == 0xd3)
             {
                 l->state = STATE_RTCM3_LEN0;
                 l->msg_idx = 0;
                 l->msg_buf[l->msg_idx++] = data[i];
                 l->msg_buf[l->msg_idx] = 0;
-            }            
+            }
         }
-        else if( l->state == STATE_NMEA_START )
+        else if(l->state == STATE_NMEA_START)
         {
-            if( data[i] < 32 )
+            if(data[i] < 32)
             {
-                ESP_LOGI(TAG, "rtcm_message_parser() NMEA %d [%s]",l->msg_idx,(char*)(l->msg_buf));
+                ESP_LOGI(TAG, "rtcm_message_parser() NMEA %d [%s]", l->msg_idx, (char*)(l->msg_buf));
                 l->state = STATE_IDLE;
             }
-            else if( l->msg_idx < (sizeof(l->msg_buf)-1) )
+            else if(l->msg_idx < (sizeof(l->msg_buf) - 1))
             {
-                 l->msg_buf[l->msg_idx++] = data[i];
-                 l->msg_buf[l->msg_idx] = 0;
+                l->msg_buf[l->msg_idx++] = data[i];
+                l->msg_buf[l->msg_idx] = 0;
             }
         }
-        else if( l->state == STATE_RTCM3_LEN0 )
+        else if(l->state == STATE_RTCM3_LEN0)
         {
             l->msg_buf[l->msg_idx++] = data[i];
             l->msg_buf[l->msg_idx] = 0;
             l->rtcm_len = data[i];
             l->state = STATE_RTCM3_LEN1;
         }
-        else if( l->state == STATE_RTCM3_LEN1 )
+        else if(l->state == STATE_RTCM3_LEN1)
         {
             l->msg_buf[l->msg_idx++] = data[i];
             l->msg_buf[l->msg_idx] = 0;
-            l->rtcm_len = ((l->rtcm_len<<8 | data[i])&0x3ff) + 3 + 3;
-            if( l->rtcm_len > 6 )
+            l->rtcm_len = ((l->rtcm_len << 8 | data[i]) & 0x3ff) + 3 + 3;
+            if(l->rtcm_len > 6)
             {
                 l->state = STATE_RTCM3_BODY;
             }
@@ -236,12 +243,12 @@ void rtcm_message_parser(GPSLoggerType* l, uint data_len, uint8_t* data)
                 l->state = STATE_IDLE;
             }
         }
-        else if( l->state == STATE_RTCM3_BODY )
+        else if(l->state == STATE_RTCM3_BODY)
         {
-            if( l->msg_idx < (sizeof(l->msg_buf)-10) )
+            if(l->msg_idx < (sizeof(l->msg_buf) - 10))
             {
-                 l->msg_buf[l->msg_idx] = data[i];
-                 l->msg_buf[l->msg_idx+1] = 0;
+                l->msg_buf[l->msg_idx] = data[i];
+                l->msg_buf[l->msg_idx + 1] = 0;
             }
             else
             {
@@ -254,11 +261,12 @@ void rtcm_message_parser(GPSLoggerType* l, uint data_len, uint8_t* data)
             {
                 uint32_t crc = rtcm_parity(0x00000000, l->rtcm_len, l->msg_buf);
                 uint32_t type = ((l->msg_buf[3] << 4) | l->msg_buf[4] >> 4);
-                //ESP_LOGI(TAG, "rtcm_message_parser() RTCM len=0x%04x crc=0x%08x type=%d", l->rtcm_len - 6, crc, type);
+                // ESP_LOGI(TAG, "rtcm_message_parser() RTCM len=0x%04x crc=0x%08x type=%d", l->rtcm_len - 6, crc,
+                // type);
                 l->state = STATE_IDLE;
-                if( crc == 0 )
+                if(crc == 0)
                 {
-                    rtcm_message_filter(type,l->rtcm_len,l->msg_buf);
+                    rtcm_message_filter(type, l->rtcm_len, l->msg_buf);
                 }
             }
         }
@@ -271,9 +279,9 @@ void rtcm_message_parser(GPSLoggerType* l, uint data_len, uint8_t* data)
 }
 
 /**
- * @brief 
+ * @brief
  * @param cmd
- * @return 
+ * @return
  */
 int gps_nmea_csum(const char* cmd)
 {
@@ -301,9 +309,9 @@ int gps_nmea_csum(const char* cmd)
 }
 
 /**
- * @brief 
+ * @brief
  * @param line
- * @return 
+ * @return
  */
 int gps_nmea_ok(char* line)
 {
@@ -315,11 +323,11 @@ int gps_nmea_ok(char* line)
             if(pcsum != NULL)
             {
                 unsigned int csum = 0;
-                if( sscanf(pcsum,"*%02x",&csum) == 1 )
+                if(sscanf(pcsum, "*%02x", &csum) == 1)
                 {
-                    if( csum == gps_nmea_csum(line) )
+                    if(csum == gps_nmea_csum(line))
                     {
-                        //ESP_LOGW(TAG, "gps_nmea_ok 0x%02x 0x%02x", csum, gps_nmea_csum(line));
+                        // ESP_LOGW(TAG, "gps_nmea_ok 0x%02x 0x%02x", csum, gps_nmea_csum(line));
                         return 1;
                     }
                 }
@@ -330,23 +338,23 @@ int gps_nmea_ok(char* line)
 }
 
 /**
- * @brief 
+ * @brief
  * @param line
  * @param idx
- * @return 
+ * @return
  */
-int gps_nmea_get_int(char* line,int idx, int def)
+int gps_nmea_get_int(char* line, int idx, int def)
 {
-    char *s = strdup(line);
-    int i=0;
+    char* s = strdup(line);
+    int i = 0;
     char* token;
-    char *saveptr = NULL;
+    char* saveptr = NULL;
     token = strtok_r(s, ",", &saveptr);
     while(token)
     {
-        if( i == idx )
+        if(i == idx)
         {
-            int r = strtol(token,NULL,10);
+            int r = strtol(token, NULL, 10);
             free(s);
             return r;
         }
@@ -358,24 +366,24 @@ int gps_nmea_get_int(char* line,int idx, int def)
 }
 
 /**
- * @brief 
+ * @brief
  * @param line
  * @param idx
- * @return 
+ * @return
  */
-float gps_nmea_get_float(char* line,int idx)
+float gps_nmea_get_float(char* line, int idx)
 {
-    char *s = strdup(line);
-    int i=0;
+    char* s = strdup(line);
+    int i = 0;
     char* token;
-    char *saveptr = NULL;
+    char* saveptr = NULL;
     token = strtok_r(s, ",", &saveptr);
     while(token)
     {
-        if( i == idx )
+        if(i == idx)
         {
             float r;
-            if(sscanf(token,"%f",&r) == 1)
+            if(sscanf(token, "%f", &r) == 1)
             {
                 free(s);
                 return r;
@@ -389,7 +397,7 @@ float gps_nmea_get_float(char* line,int idx)
 }
 
 /**
- * @brief 
+ * @brief
  * @param cmd
  */
 void gps_nmea_send(const char* cmd)
@@ -408,7 +416,7 @@ void gps_nmea_send(const char* cmd)
     }
 }
 
-#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
 /**
  * @brief
  * @param evt
@@ -448,7 +456,7 @@ esp_err_t gps_ntrip_ev(esp_http_client_event_t* evt)
 #endif
         if(uart_is_driver_installed(UART_NUM_1))
         {
-            rtcm_message_parser(&gps_logger[0],evt->data_len,(uint8_t*)evt->data);
+            rtcm_message_parser(&gps_logger[0], evt->data_len, (uint8_t*)evt->data);
         }
         break;
     case HTTP_EVENT_ON_FINISH:
@@ -628,20 +636,127 @@ static void ntrip_task(void* pvParameters)
 /**
  * @brief
  */
-#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
 void gps_ntrip_start()
 {
     gps_md.ntrip.needed = 1;
 }
-#endif    
+#endif
 
 /**
  * @brief
  */
-#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
 void gps_ntrip_stop()
 {
     gps_md.ntrip.needed = 0;
+}
+#endif
+
+#ifdef CONFIG_RTK1010_NODE_ROVER_RTCM_CLIENT
+/**
+ * @brief
+ */
+static void gps_rtcmtcpclient_stop()
+{
+    if(gps_md.rtcmtcpclient.client_sock != 0)
+    {
+        close(gps_md.rtcmtcpclient.client_sock);
+        gps_md.rtcmtcpclient.client_sock = 0;
+    }
+}
+
+/**
+ * @brief
+ */
+static void gps_rtcmtcpclient_start()
+{
+    if(gps_md.rtcmtcpclient.reconnect_timeout > esp_timer_get_time())
+    {
+        return;
+    }
+
+    if(gps_md.rtcmtcpclient.client_sock == 0)
+    {
+        char host_ip[] = CONFIG_RTCM_HOST;
+        ESP_LOGI(TAG, "gps_rtcmtcpclient_start %s:%d ...", host_ip, CONFIG_RTCM_PORT);
+
+        int ip_protocol = 0;
+        int addr_family = 0;
+#if 0
+        struct sockaddr_in6 destAddr;
+        char addr_str[128];
+        bzero(&destAddr.sin6_addr.un, sizeof(destAddr.sin6_addr.un));
+        inet6_aton(host_ip, &destAddr.sin6_addr);
+        destAddr.sin6_family = AF_INET6;
+        destAddr.sin6_port = htons(CONFIG_RTCM_PORT);
+        addr_family = AF_INET6;
+        ip_protocol = IPPROTO_IPV6;
+        inet6_ntoa_r(destAddr.sin6_addr, addr_str, sizeof(addr_str) - 1);
+#else
+        struct sockaddr_in destAddr;
+        destAddr.sin_addr.s_addr = inet_addr(host_ip);
+        destAddr.sin_family = AF_INET;
+        destAddr.sin_port = htons(CONFIG_RTCM_PORT);
+        addr_family = AF_INET;
+        ip_protocol = IPPROTO_IP;
+#endif
+
+        gps_md.rtcmtcpclient.reconnect_timeout = esp_timer_get_time() + 10000000;
+
+        gps_md.rtcmtcpclient.client_sock = socket(addr_family, SOCK_STREAM, ip_protocol);
+        if(gps_md.rtcmtcpclient.client_sock < 0)
+        {
+            ESP_LOGE(TAG, "gps_rtcmtcpclient_start unable to create socket: errno %d", errno);
+            gps_rtcmtcpclient_stop();
+            return;
+        }
+
+        // fcntl(gps_md.rtcmtcpclient.client_sock, F_SETFL, O_NONBLOCK);
+        int err = connect(gps_md.rtcmtcpclient.client_sock, (struct sockaddr*)&destAddr, sizeof(struct sockaddr_in6));
+        if(err != 0)
+        {
+            ESP_LOGE(TAG, "gps_rtcmtcpclient_start Socket unable to connect: errno %d", errno);
+            gps_rtcmtcpclient_stop();
+            return;
+        }
+        // gps_md.rtcmtcpclient.reconnect_timeout = 0;
+
+        ESP_LOGI(TAG, "gps_rtcmtcpclient_start ... ok");
+    }
+}
+
+/**
+ * @brief
+ */
+static void gps_rtcmtcpclient_handle()
+{
+    if(gps_md.rtcmtcpclient.client_sock == 0)
+    {
+        gps_rtcmtcpclient_start();
+    }
+
+    if(gps_md.rtcmtcpclient.client_sock != 0)
+    {
+        int len = 0;
+        len = recv(gps_md.rtcmtcpclient.client_sock, gps_tx_buffer, sizeof(gps_tx_buffer) - 2, MSG_DONTWAIT);
+        if(len > 0)
+        {
+            // ESP_LOGE(TAG,"gps_rtcmtcpclient_handle TX.GPS:%s",gps_tx_buffer);
+            if(uart_is_driver_installed(UART_NUM_1))
+            {
+                uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, len);
+                gps_md.uart.tx_bytes += len;
+                gps_md.ntrip.ntrip_rx_bytes += len;
+            }
+        }
+        else if(len < 0 && errno != EAGAIN)
+        {
+            ESP_LOGI(TAG, "gps_rtcmtcpclient_handle ... disconnected errno=%d", errno);
+            close(gps_md.rtcmtcpclient.client_sock);
+            gps_md.rtcmtcpclient.client_sock = 0;
+        }
+    }
 }
 #endif
 
@@ -678,7 +793,7 @@ static void gps_rtcmtcpserv_start()
         char addr_str[128];
         bzero(&destAddr.sin6_addr.un, sizeof(destAddr.sin6_addr.un));
         destAddr.sin6_family = AF_INET6;
-        destAddr.sin6_port = htons(RTCMTCPSERV_PORT);
+        destAddr.sin6_port = htons(CONFIG_RTCM_PORT);
         addr_family = AF_INET6;
         ip_protocol = IPPROTO_IPV6;
         inet6_ntoa_r(destAddr.sin6_addr, addr_str, sizeof(addr_str) - 1);
@@ -739,7 +854,7 @@ static void gps_rtcmtcpserv_handle()
             if(retval == -1)
             {
                 perror("select()");
-                //gps_tcpserv_stop();
+                // gps_tcpserv_stop();
             }
             else if(retval)
             {
@@ -760,7 +875,7 @@ static void gps_rtcmtcpserv_handle()
                     setsockopt(gps_md.rtcmtcpserv.client_sock, IPPROTO_TCP, TCP_KEEPIDLE, &keepIdle, sizeof(int));
                     setsockopt(gps_md.rtcmtcpserv.client_sock, IPPROTO_TCP, TCP_KEEPINTVL, &keepInterval, sizeof(int));
                     setsockopt(gps_md.rtcmtcpserv.client_sock, IPPROTO_TCP, TCP_KEEPCNT, &keepCount, sizeof(int));
-                    setsockopt(gps_md.rtcmtcpserv.client_sock, IPPROTO_TCP, TCP_NODELAY, (int[]){1}, sizeof(int));
+                    setsockopt(gps_md.rtcmtcpserv.client_sock, IPPROTO_TCP, TCP_NODELAY, (int[]) { 1 }, sizeof(int));
 
                     ESP_LOGI(TAG, "gps_rtcmtcpserv_handle ... connected");
                 }
@@ -771,7 +886,7 @@ static void gps_rtcmtcpserv_handle()
     if(gps_md.rtcmtcpserv.client_sock != 0)
     {
         int len = 0;
-        len = recv(gps_md.rtcmtcpserv.client_sock, gps_tx_buffer, sizeof(gps_tx_buffer)-2, MSG_DONTWAIT);
+        len = recv(gps_md.rtcmtcpserv.client_sock, gps_tx_buffer, sizeof(gps_tx_buffer) - 2, MSG_DONTWAIT);
         if(len > 0)
         {
 #if 0
@@ -781,11 +896,11 @@ static void gps_rtcmtcpserv_handle()
                 uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, len);
                 gps_md.uart.tx_bytes += len;
             }
-#endif    
-        }    
+#endif
+        }
         else if(len < 0 && errno != EAGAIN)
         {
-            ESP_LOGI(TAG, "gps_rtcmtcpserv_handle ... disconnected errno=%d",errno);
+            ESP_LOGI(TAG, "gps_rtcmtcpserv_handle ... disconnected errno=%d", errno);
             close(gps_md.rtcmtcpserv.client_sock);
             gps_md.rtcmtcpserv.client_sock = 0;
         }
@@ -886,7 +1001,7 @@ static void gps_tcpserv_handle()
             if(retval == -1)
             {
                 perror("select()");
-                //gps_tcpserv_stop();
+                // gps_tcpserv_stop();
             }
             else if(retval)
             {
@@ -907,7 +1022,7 @@ static void gps_tcpserv_handle()
                     setsockopt(gps_md.tcpserv.client_sock, IPPROTO_TCP, TCP_KEEPIDLE, &keepIdle, sizeof(int));
                     setsockopt(gps_md.tcpserv.client_sock, IPPROTO_TCP, TCP_KEEPINTVL, &keepInterval, sizeof(int));
                     setsockopt(gps_md.tcpserv.client_sock, IPPROTO_TCP, TCP_KEEPCNT, &keepCount, sizeof(int));
-                    setsockopt(gps_md.tcpserv.client_sock, IPPROTO_TCP, TCP_NODELAY, (int[]){1}, sizeof(int));
+                    setsockopt(gps_md.tcpserv.client_sock, IPPROTO_TCP, TCP_NODELAY, (int[]) { 1 }, sizeof(int));
 
                     ESP_LOGI(TAG, "gps_tcpserv_handle ... connected");
                 }
@@ -918,19 +1033,19 @@ static void gps_tcpserv_handle()
     if(gps_md.tcpserv.client_sock != 0)
     {
         int len = 0;
-        len = recv(gps_md.tcpserv.client_sock, gps_tx_buffer, sizeof(gps_tx_buffer)-2, MSG_DONTWAIT);
+        len = recv(gps_md.tcpserv.client_sock, gps_tx_buffer, sizeof(gps_tx_buffer) - 2, MSG_DONTWAIT);
         if(len > 0)
         {
             if(uart_is_driver_installed(UART_NUM_1))
             {
-                //ESP_LOGE(TAG,"TX.GPS:%s",gps_tx_buffer);
+                // ESP_LOGE(TAG,"TX.GPS:%s",gps_tx_buffer);
                 uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, len);
                 gps_md.uart.tx_bytes += len;
             }
-        }        
+        }
         else if(len < 0 && errno != EAGAIN)
         {
-            ESP_LOGI(TAG, "gps_tcpserv_handle ... disconnected errno=%d",errno);
+            ESP_LOGI(TAG, "gps_tcpserv_handle ... disconnected errno=%d", errno);
             close(gps_md.tcpserv.client_sock);
             gps_md.tcpserv.client_sock = 0;
         }
@@ -950,14 +1065,14 @@ static void gps_handle_nmea(int buflen, const char* buf)
     int i;
     for(i = 0; i < buflen; i++)
     {
-        if(linebuf_used >= (sizeof(linebuf)-5))
+        if(linebuf_used >= (sizeof(linebuf) - 5))
         {
-            ESP_LOGW(TAG,"gps_handle_nmea() overflow");
+            ESP_LOGW(TAG, "gps_handle_nmea() overflow");
             linebuf_used = 0;
             gps_md.uart.rx_errors++;
         }
         linebuf[linebuf_used] = buf[i];
-        if( linebuf_used==0 && linebuf[0] != '$' )
+        if(linebuf_used == 0 && linebuf[0] != '$')
         {
             // start with $
         }
@@ -972,50 +1087,59 @@ static void gps_handle_nmea(int buflen, const char* buf)
                 linebuf[linebuf_used++] = '\r';
                 linebuf[linebuf_used++] = '\n';
                 linebuf[linebuf_used] = 0;
-                if(linebuf_used>4 && (strstr(linebuf,"$PAIR001,004") == &linebuf[0]) ) 
+                if(linebuf_used > 4 && (strstr(linebuf, "$PAIR001,004") == &linebuf[0]))
                 { // WARM START
-                    linebuf[linebuf_used-2] = 0;
-                    linebuf[linebuf_used-1] = 0;
-                    ESP_LOGE(TAG,"RX.RTK-1010: {%s} !!! RESTART !!! init sequence ...",linebuf);
+                    linebuf[linebuf_used - 2] = 0;
+                    linebuf[linebuf_used - 1] = 0;
+                    ESP_LOGE(TAG, "RX.RTK-1010: {%s} !!! RESTART !!! init sequence ...", linebuf);
                     gps_nmea_send("$PLSC,VER*"); // request firmware version
 #if defined(CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT) || defined(CONFIG_RTK1010_NODE_ROVER_RTCM_CLIENT)
                     gps_nmea_send("$PLSC,MCBASE,0*"); // Set up the board as a rover(default)
 #elif defined(CONFIG_RTK1010_NODE_BASE_RTCM_SERVER)
-                    gps_nmea_send("$PLSC,MCBASE,1*"); // Set up the board as a caster
+                    gps_nmea_send("$PLSC,MCBASE,1*"); // Set up the board as a RTCM caster
+                    // gps_nmea_send("$PLSC,NMEA,0*"); // Set up the board as a RTCM caster
+                    // gps_nmea_send("$PLSC,RRTCM,1*"); // Set up the board as a RTCM caster
+                    // gps_nmea_send("$PAIR436,1*"); // enable RTCM satellite ephemeris output
+#endif
+#if 0
+Stop NMEA output, change to RTCM3 output:
+$PLSC,NMEA,0*3B //disable NMEA output temporarily
+$PLSC,RRTCM,1*67 // enable RTCM3 output
+
+To return to default rover mode, use the following command:
+$PLSC,NMEA,FF*0B //enable NMEA
+$PLSC,RRTCM,0*66 //disable RTCM3 output
 #endif
                     // gps_nmea_send("$PLSC,FIXRATE,5*"); // Set up the board as a rover(default)
                     // gps_nmea_send("$PAIR050,100*"); // Set position fix intervall to 10Hz
                     // gps_nmea_send("$PAIR070,0*"); // Set speed threshold to 0/ms
                     // gps_nmea_send("$PAIR400,2*"); // Set RTCM source
                     // gps_nmea_send("$PLSC,SETBASEXYZ,3842.017,663.632,5030.762*");
-                }                
+                }
                 else if(linebuf_used > 4 && (strstr(linebuf, "$P") == &linebuf[0]))
                 {
                     // RTK-1010 custom message
-                    linebuf[linebuf_used-2] = 0;
-                    linebuf[linebuf_used-1] = 0;
-                    ESP_LOGW(TAG,"RX.RTK-1010: %s %02x", 
-                        linebuf,
-                        gps_nmea_csum(linebuf));
-                }           
-                
-                
-                if( gps_nmea_ok(linebuf) )
+                    linebuf[linebuf_used - 2] = 0;
+                    linebuf[linebuf_used - 1] = 0;
+                    ESP_LOGW(TAG, "RX.RTK-1010: %s %02x", linebuf, gps_nmea_csum(linebuf));
+                }
+
+                if(gps_nmea_ok(linebuf))
                 {
-                    //https://receiverhelp.trimble.com/alloy-gnss/en-us/NMEA-0183messages_GGA.html
-                    if( strstr(linebuf,"$GNGGA") == linebuf )
+                    // https://receiverhelp.trimble.com/alloy-gnss/en-us/NMEA-0183messages_GGA.html
+                    if(strstr(linebuf, "$GNGGA") == linebuf)
                     {
-                        strcpy(linebuf_bak,linebuf);
-                        gps_md.uart.position_fix = gps_nmea_get_int(linebuf,6,0);
+                        strcpy(linebuf_bak, linebuf);
+                        gps_md.uart.position_fix = gps_nmea_get_int(linebuf, 6, 0);
                         if(gps_md.ntrip.gga_print_timeout < esp_timer_get_time())
                         {
                             gps_md.ntrip.gga_print_timeout = esp_timer_get_time() + 3000000;
-                            ESP_LOGW(TAG,"GPS: ok: fix=%d sat=%d %.6f %.6f ntrip-rx=%d uart-tx=%d uart-rx=%d gps-errors=%d", 
-                                gps_md.uart.position_fix,
-                                gps_nmea_get_int(linebuf,7,0),
-                                gps_nmea_get_float(linebuf,2),
-                                gps_nmea_get_float(linebuf,4),
-                                gps_md.ntrip.ntrip_rx_bytes, gps_md.uart.tx_bytes,gps_md.uart.rx_bytes, gps_md.uart.rx_errors);
+                            ESP_LOGW(TAG,
+                                "GPS: ok: fix=%d sat=%d %.6f %.6f ntrip-rx=%d uart-tx=%d uart-rx=%d gps-errors=%d",
+                                gps_md.uart.position_fix, gps_nmea_get_int(linebuf, 7, 0),
+                                gps_nmea_get_float(linebuf, 2), gps_nmea_get_float(linebuf, 4),
+                                gps_md.ntrip.ntrip_rx_bytes, gps_md.uart.tx_bytes, gps_md.uart.rx_bytes,
+                                gps_md.uart.rx_errors);
                         }
 
                         if(gps_md.uart.position_fix >= 1)
@@ -1024,11 +1148,11 @@ static void gps_handle_nmea(int buflen, const char* buf)
                             strncpy(gps_md.ntrip.gga_line, linebuf_bak, linebuf_used);
                             gps_md.ntrip.gga_line[linebuf_used] = 0;
 #endif
-#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
                             gps_ntrip_start();
-#endif                            
+#endif
                         }
-                    }                    
+                    }
                 }
             }
             linebuf_used = 0;
@@ -1088,7 +1212,7 @@ static void gps_uart_start()
         uart_set_line_inverse(UART_NUM_1, UART_SIGNAL_TXD_INV | UART_SIGNAL_RXD_INV);
 #endif
 
-        uart_flush(UART_NUM_1);        
+        uart_flush(UART_NUM_1);
         gps_md.uart.initflag = 1;
     }
 }
@@ -1101,12 +1225,12 @@ static void gps_uart_handle()
     if(uart_is_driver_installed(UART_NUM_1))
     {
         // ESP_LOGI(TAG, "gps_uart_handle");
-        int len = uart_read_bytes(UART_NUM_1, gps_rx_buffer, (sizeof(gps_rx_buffer)-2), 10 / portTICK_RATE_MS);
+        int len = uart_read_bytes(UART_NUM_1, gps_rx_buffer, (sizeof(gps_rx_buffer) - 2), 10 / portTICK_RATE_MS);
         if(len > 0)
         {
-            if( gps_md.uart.initflag == 1 )
+            if(gps_md.uart.initflag == 1)
             {
-                ESP_LOGE(TAG,"GPS INIT");
+                ESP_LOGE(TAG, "GPS INIT");
                 gps_md.uart.initflag = 0;
                 gps_nmea_send("$PAIR004*"); // Hot Start ...
             }
@@ -1115,17 +1239,17 @@ static void gps_uart_handle()
             if(gps_md.tcpserv.client_sock != 0)
             {
                 send(gps_md.tcpserv.client_sock, gps_rx_buffer, len, 0);
-                //fflush(gps_md.tcpserv.client_sock);
+                // fflush(gps_md.tcpserv.client_sock);
             }
-#ifdef CONFIG_RTK1010_NODE_BASE_RTCM_SERVER            
+#ifdef CONFIG_RTK1010_NODE_BASE_RTCM_SERVER
             if(gps_md.rtcmtcpserv.client_sock != 0)
             {
                 send(gps_md.rtcmtcpserv.client_sock, gps_rx_buffer, len, 0);
-                //fflush(gps_md.tcpserv.client_sock);
+                // fflush(gps_md.tcpserv.client_sock);
             }
-#endif            
+#endif
             gps_rx_buffer[len] = 0;
-            //ESP_LOGW(TAG, "tx %d %s", len, gps_rx_buffer);
+            // ESP_LOGW(TAG, "tx %d %s", len, gps_rx_buffer);
             gps_handle_nmea(len, (const char*)gps_rx_buffer);
         }
     }
@@ -1156,7 +1280,10 @@ static void gps_task(void* pvParameters)
         gps_tcpserv_start();
 #ifdef CONFIG_RTK1010_NODE_BASE_RTCM_SERVER
         gps_rtcmtcpserv_start();
-#endif        
+#endif
+#ifdef CONFIG_RTK1010_NODE_ROVER_RTCM_CLIENT
+        gps_rtcmtcpclient_start();
+#endif
 
         while(true)
         {
@@ -1169,15 +1296,21 @@ static void gps_task(void* pvParameters)
             gps_tcpserv_handle();
 #ifdef CONFIG_RTK1010_NODE_BASE_RTCM_SERVER
             gps_rtcmtcpserv_handle();
-#endif        
+#endif
+#ifdef CONFIG_RTK1010_NODE_ROVER_RTCM_CLIENT
+            gps_rtcmtcpclient_handle();
+#endif
         }
 
-#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
         gps_ntrip_stop();
 #endif
 #ifdef CONFIG_RTK1010_NODE_BASE_RTCM_SERVER
         gps_rtcmtcpserv_stop();
-#endif        
+#endif
+#ifdef CONFIG_RTK1010_NODE_ROVER_RTCM_CLIENT
+        gps_rtcmtcpclient_stop();
+#endif
         gps_tcpserv_stop();
         gps_uart_stop();
         vTaskDelete(NULL);
@@ -1189,7 +1322,7 @@ static void gps_task(void* pvParameters)
  */
 void gps_init()
 {
-#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT    
+#ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
     strcpy(gps_md.ntrip.host, CONFIG_NTRIP_HOST);
     gps_md.ntrip.port = CONFIG_NTRIP_PORT;
     strcpy(gps_md.ntrip.username, CONFIG_NTRIP_USERNAME);
@@ -1204,7 +1337,7 @@ void gps_init()
     {
         xTaskCreate(ntrip_task, "ntrip_task", 4096, NULL, 1, NULL);
     }
-#endif    
+#endif
     xTaskCreate(gps_task, "gps_task", 4096, NULL, 2, NULL);
 }
 /**
