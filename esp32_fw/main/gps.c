@@ -745,8 +745,10 @@ static void gps_rtcmtcpclient_handle()
             // ESP_LOGE(TAG,"gps_rtcmtcpclient_handle TX.GPS:%s",gps_tx_buffer);
             if(uart_is_driver_installed(UART_NUM_1))
             {
-                uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, len);
-                gps_md.uart.tx_bytes += len;
+                //uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, len);
+                //gps_md.uart.tx_bytes += len;
+                rtcm_message_parser(&gps_logger[0], len, (uint8_t*)gps_tx_buffer);
+
                 gps_md.ntrip.ntrip_rx_bytes += len;
             }
         }
