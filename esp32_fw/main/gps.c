@@ -1097,9 +1097,9 @@ static void gps_handle_nmea(int buflen, const char* buf)
                     gps_nmea_send("$PLSC,MCBASE,0*"); // Set up the board as a rover(default)
 #elif defined(CONFIG_RTK1010_NODE_BASE_RTCM_SERVER)
                     gps_nmea_send("$PLSC,MCBASE,1*"); // Set up the board as a RTCM caster
-                    // gps_nmea_send("$PLSC,NMEA,0*"); // Set up the board as a RTCM caster
-                    // gps_nmea_send("$PLSC,RRTCM,1*"); // Set up the board as a RTCM caster
-                    // gps_nmea_send("$PAIR436,1*"); // enable RTCM satellite ephemeris output
+                    gps_nmea_send("$PLSC,NMEA,0*"); // Set up the board as a RTCM caster
+                    gps_nmea_send("$PLSC,RRTCM,1*"); // Set up the board as a RTCM caster
+                    gps_nmea_send("$PAIR436,1*"); // enable RTCM satellite ephemeris output
 #endif
 #if 0
 Stop NMEA output, change to RTCM3 output:
