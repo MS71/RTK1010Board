@@ -163,7 +163,7 @@ void rtcm_message_filter(uint32_t rtcm_type, uint16_t rtcm_bytes, uint8_t* rtcm_
 {
     if(rtcm_bytes >= 8)
     {
-#if 0        
+#if 0
         if((rtcm_type == 1005) || (rtcm_type == 1074) || (rtcm_type == 1084) || (rtcm_type == 1094) ||
             (rtcm_type == 1114) || (rtcm_type == 1124))
 #endif
@@ -1096,27 +1096,19 @@ static void gps_handle_nmea(int buflen, const char* buf)
                     ESP_LOGE(TAG, "RX.RTK-1010: {%s} !!! RESTART !!! init sequence ...", linebuf);
                     gps_nmea_send("$PLSC,VER*"); // request firmware version
 #if defined(CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT) || defined(CONFIG_RTK1010_NODE_ROVER_RTCM_CLIENT)
+                    gps_nmea_send("$PLSC,FIXRATE,10*"); // Set fixrate to 10Hz
                     gps_nmea_send("$PLSC,MCBASE,0*"); // Set up the board as a rover(default)
+                    //gps_nmea_send("$PAIR050,100*"); // Set position fix intervall to 10Hz
+                    //gps_nmea_send("$PLSC,SETBASEXYZ,3856.062429080888,690.0109524095845,5016.542125862716*");
 #elif defined(CONFIG_RTK1010_NODE_BASE_RTCM_SERVER)
+                    // https://dominoc925-pages.appspot.com/mapplets/cs_ecef.html
+                    //gps_nmea_send("$PLSC,SETBASEXYZ,3856.062,690.010,5016.542*");
+                    gps_nmea_send("$PLSC,SETBASEXYZ,3856.065,689.998,5016.541*");                    
+                    gps_nmea_send("$PAIR436,1*");    // enable RTCM satellite ephemeris output
                     gps_nmea_send("$PLSC,MCBASE,1*"); // Set up the board as a RTCM caster
-                    gps_nmea_send("$PLSC,NMEA,0*"); // Set up the board as a RTCM caster
-                    gps_nmea_send("$PLSC,RRTCM,1*"); // Set up the board as a RTCM caster
-                    gps_nmea_send("$PAIR436,1*"); // enable RTCM satellite ephemeris output
+                    //gps_nmea_send("$PLSC,NMEA,0*");  // Set up the board as a RTCM caster
+                    //gps_nmea_send("$PLSC,RRTCM,1*"); // Set up the board as a RTCM caster
 #endif
-#if 0
-Stop NMEA output, change to RTCM3 output:
-$PLSC,NMEA,0*3B //disable NMEA output temporarily
-$PLSC,RRTCM,1*67 // enable RTCM3 output
-
-To return to default rover mode, use the following command:
-$PLSC,NMEA,FF*0B //enable NMEA
-$PLSC,RRTCM,0*66 //disable RTCM3 output
-#endif
-                    // gps_nmea_send("$PLSC,FIXRATE,5*"); // Set up the board as a rover(default)
-                    // gps_nmea_send("$PAIR050,100*"); // Set position fix intervall to 10Hz
-                    // gps_nmea_send("$PAIR070,0*"); // Set speed threshold to 0/ms
-                    // gps_nmea_send("$PAIR400,2*"); // Set RTCM source
-                    // gps_nmea_send("$PLSC,SETBASEXYZ,3842.017,663.632,5030.762*");
                 }
                 else if(linebuf_used > 4 && (strstr(linebuf, "$P") == &linebuf[0]))
                 {
@@ -1137,9 +1129,9 @@ $PLSC,RRTCM,0*66 //disable RTCM3 output
                         {
                             gps_md.ntrip.gga_print_timeout = esp_timer_get_time() + 3000000;
                             ESP_LOGW(TAG,
-                                "GPS: ok: fix=%d sat=%d %.6f %.6f ntrip-rx=%d uart-tx=%d uart-rx=%d gps-errors=%d",
+                                "GPS: ok: fix=%d sat=%d %.6f %.6f %.6f ntrip-rx=%d uart-tx=%d uart-rx=%d gps-errors=%d",
                                 gps_md.uart.position_fix, gps_nmea_get_int(linebuf, 7, 0),
-                                gps_nmea_get_float(linebuf, 2), gps_nmea_get_float(linebuf, 4),
+                                gps_nmea_get_float(linebuf, 2), gps_nmea_get_float(linebuf, 4), gps_nmea_get_float(linebuf, 9),
                                 gps_md.ntrip.ntrip_rx_bytes, gps_md.uart.tx_bytes, gps_md.uart.rx_bytes,
                                 gps_md.uart.rx_errors);
                         }
