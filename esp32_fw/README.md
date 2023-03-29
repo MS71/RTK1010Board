@@ -104,6 +104,9 @@ rover/esp32_fw$ ping rtkrover
 
 => Console
 $ nc -k -l -u 42000
+
+=> Remote Update
+curl rover:8032 --data-binary @- < build/rtknode.bin
 ```
 ## TCP RTK Base
 ```sh
@@ -159,6 +162,9 @@ tcpbase/esp32_fw$ ping tcpbase
 
 => Console
 $ nc -k -l -u 42001
+
+=> Remote Update
+curl tcpbase:8032 --data-binary @- < build/rtknode.bin
 ```
 ## TCP RTK Rover
 ```sh
@@ -215,4 +221,7 @@ tcprover/esp32_fw$ ping tcprover
 
 => Console
 $ nc -k -l -u 42002
+
+=> Remote Update
+curl tcprover:8032 --data-binary @- < build/rtknode.bin
 ```
