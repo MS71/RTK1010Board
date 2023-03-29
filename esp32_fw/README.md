@@ -43,3 +43,62 @@ curl 192.168.0.191:8032 --data-binary @- < build/rtknode.bin
 nc -k -l -u 42007
 ```
 
+# Example
+## SAPOS Rover
+```sh
+$ git clone https://github.com/MS71/RTK1010Board.git rover
+Cloning into 'rover'...
+remote: Enumerating objects: 486, done.
+remote: Counting objects: 100% (122/122), done.
+remote: Compressing objects: 100% (50/50), done.
+remote: Total 486 (delta 97), reused 88 (delta 72), pack-reused 364
+Receiving objects: 100% (486/486), 25.11 MiB | 18.16 MiB/s, done.
+Resolving deltas: 100% (235/235), done.
+
+$ cd rover/esp32_fw
+rover/esp32_fw$ . ~/workspace/esp32/esp-idf-v4.4/export.sh
+Setting IDF_PATH to 'workspace/esp32/esp-idf-v4.4'
+Detecting the Python interpreter
+Checking "python" ...
+Checking "python3" ...
+...
+Done! You can now compile ESP-IDF projects.
+Go to the project directory and run:
+
+  idf.py build
+
+rover/esp32_fw$ idf.py set-target esp32s2
+Adding "set-target"'s dependency "fullclean" to list of commands with default set of options.
+Executing action: fullclean
+...
+-- Configuring done
+-- Generating done
+-- Build files have been written to: rover/esp32_fw/build
+
+rover/esp32_fw$ idf.py menuconfig
+-> Partition Table -> "Factory app, two OTA definitions"
+-> Serial flasher config -> "Flash size (4 MB)"
+-> RTK1010 Node Config -> WIFI Settings -> fill Hostname=rtkrover, SSID, PASSWORD
+-> RTK1010 Node Config -> Console -> "[*] Enable UDP Console"
+-> RTK1010 Node Config -> Console -> UDP Console Host = IP of your linux development host
+-> RTK1010 Node Config -> Node Variant (Rover NTRIP Client)
+-> RTK1010 Node Config -> NTRIP Client Settings -> SAPOS user data
+  (openservice-sapos.niedersachsen.de) NTRIP Host
+  (2101) NTRIP Port
+  (myusername) NTRIP Username
+  (mypassword) NTRIP Password
+  (VRS_3_2G_NI) NTRIP Mountpoint
+-> Component config -> TinyUSB Stack -> Enable
+-> Component config -> TinyUSB Stack -> Use TinyUSB Stack -> Communication Device Class (CDC) -> Enable
+=> EXIT + SAVE
+  
+rover/esp32_fw$ idf.py build
+...
+Done
+esp32_fw$ idf.py dfu
+=> connect board with BOOT0 jumper
+esp32_fw$ idf.py dfu-flash
+remove BOOT0 jumper and restart
+$ ping rtkrover
+```
+
