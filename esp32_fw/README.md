@@ -76,8 +76,7 @@ Executing action: fullclean
 -- Build files have been written to: rover/esp32_fw/build
 
 rover/esp32_fw$ idf.py menuconfig
--> Partition Table -> "Factory app, two OTA definitions"
--> Serial flasher config -> "Flash size (4 MB)"
+[O/Load] esp32_fw/sdkconfig.default 
 -> RTK1010 Node Config -> WIFI Settings -> fill Hostname=rtkrover, SSID, PASSWORD
 -> RTK1010 Node Config -> Console -> "[*] Enable UDP Console"
 -> RTK1010 Node Config -> Console -> UDP Console Host = IP of your linux development host
@@ -89,8 +88,6 @@ rover/esp32_fw$ idf.py menuconfig
   (myusername) NTRIP Username
   (mypassword) NTRIP Password
   (VRS_3_2G_NI) NTRIP Mountpoint
--> Component config -> TinyUSB Stack -> Enable
--> Component config -> TinyUSB Stack -> Use TinyUSB Stack -> Communication Device Class (CDC) -> Enable
 => EXIT + SAVE
   
 rover/esp32_fw$ idf.py build
@@ -140,15 +137,12 @@ Executing action: fullclean
 -- Build files have been written to: rover/esp32_fw/build
 
 tcpbase/esp32_fw$ idf.py menuconfig
--> Partition Table -> "Factory app, two OTA definitions"
--> Serial flasher config -> "Flash size (4 MB)"
+[O/Load] esp32_fw/sdkconfig.default 
 -> RTK1010 Node Config -> WIFI Settings -> fill Hostname=tcpbase, SSID, PASSWORD
 -> RTK1010 Node Config -> Console -> "[*] Enable UDP Console"
 -> RTK1010 Node Config -> Console -> UDP Console Host = IP of your linux development host
 -> RTK1010 Node Config -> Console Settings -> UDP Console Port = 42001
 -> RTK1010 Node Config -> Node Variant (Base RTCM TCP Server)
--> Component config -> TinyUSB Stack -> Enable
--> Component config -> TinyUSB Stack -> Use TinyUSB Stack -> Communication Device Class (CDC) -> Enable
 => EXIT + SAVE
   
 tcpbase/esp32_fw$ idf.py build
@@ -198,16 +192,13 @@ Executing action: fullclean
 -- Build files have been written to: tcprover/esp32_fw/build
 
 tcprover/esp32_fw$ idf.py menuconfig
--> Partition Table -> "Factory app, two OTA definitions"
--> Serial flasher config -> "Flash size (4 MB)"
+[O/Load] esp32_fw/sdkconfig.default 
 -> RTK1010 Node Config -> WIFI Settings -> fill Hostname=tcprover, SSID, PASSWORD
 -> RTK1010 Node Config -> Console -> "[*] Enable UDP Console"
 -> RTK1010 Node Config -> Console -> UDP Console Host = IP of your linux development host
 -> RTK1010 Node Config -> Console Settings -> UDP Console Port = 42002
 -> RTK1010 Node Config -> Node Variant (Base RTCM TCP Client)
 -> RTK1010 Node Config → RTCM Client Settings -> RTCM Host = tcpbase ip
--> Component config -> TinyUSB Stack -> Enable
--> Component config -> TinyUSB Stack -> Use TinyUSB Stack -> Communication Device Class (CDC) -> Enable
 => EXIT + SAVE
   
 tcprover/esp32_fw$ idf.py build
