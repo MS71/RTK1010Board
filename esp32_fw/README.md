@@ -43,3 +43,176 @@ curl 192.168.0.191:8032 --data-binary @- < build/rtknode.bin
 nc -k -l -u 42007
 ```
 
+# Example
+## SAPOS Rover
+```sh
+$ git clone https://github.com/MS71/RTK1010Board.git rover
+Cloning into 'rover'...
+remote: Enumerating objects: 486, done.
+remote: Counting objects: 100% (122/122), done.
+remote: Compressing objects: 100% (50/50), done.
+remote: Total 486 (delta 97), reused 88 (delta 72), pack-reused 364
+Receiving objects: 100% (486/486), 25.11 MiB | 18.16 MiB/s, done.
+Resolving deltas: 100% (235/235), done.
+
+$ cd rover/esp32_fw
+rover/esp32_fw$ . ~/workspace/esp32/esp-idf-v4.4/export.sh
+Setting IDF_PATH to 'workspace/esp32/esp-idf-v4.4'
+Detecting the Python interpreter
+Checking "python" ...
+Checking "python3" ...
+...
+Done! You can now compile ESP-IDF projects.
+Go to the project directory and run:
+
+  idf.py build
+
+rover/esp32_fw$ idf.py set-target esp32s2
+Adding "set-target"'s dependency "fullclean" to list of commands with default set of options.
+Executing action: fullclean
+...
+-- Configuring done
+-- Generating done
+-- Build files have been written to: rover/esp32_fw/build
+
+rover/esp32_fw$ idf.py menuconfig
+[O/Load] esp32_fw/sdkconfig.default 
+-> RTK1010 Node Config -> WIFI Settings -> fill Hostname=rtkrover, SSID, PASSWORD
+-> RTK1010 Node Config -> Console -> "[*] Enable UDP Console"
+-> RTK1010 Node Config -> Console -> UDP Console Host = IP of your linux development host
+-> RTK1010 Node Config -> Console Settings -> UDP Console Port = 42000
+-> RTK1010 Node Config -> Node Variant (Rover NTRIP Client)
+-> RTK1010 Node Config -> NTRIP Client Settings -> SAPOS user data
+  (openservice-sapos.niedersachsen.de) NTRIP Host
+  (2101) NTRIP Port
+  (myusername) NTRIP Username
+  (mypassword) NTRIP Password
+  (VRS_3_2G_NI) NTRIP Mountpoint
+=> EXIT + SAVE
+  
+rover/esp32_fw$ idf.py build
+...
+Done
+rover/esp32_fw$ idf.py dfu
+=> connect board with BOOT0 jumper
+rover/esp32_fw$ idf.py dfu-flash
+remove BOOT0 jumper and restart
+rover/esp32_fw$ ping rtkrover
+
+=> Console
+$ nc -k -l -u 42000
+
+=> Remote Update
+curl rover:8032 --data-binary @- < build/rtknode.bin
+```
+## TCP RTK Base
+```sh
+$ git clone https://github.com/MS71/RTK1010Board.git tcpbase
+Cloning into 'tcpbase'...
+remote: Enumerating objects: 486, done.
+remote: Counting objects: 100% (122/122), done.
+remote: Compressing objects: 100% (50/50), done.
+remote: Total 486 (delta 97), reused 88 (delta 72), pack-reused 364
+Receiving objects: 100% (486/486), 25.11 MiB | 18.16 MiB/s, done.
+Resolving deltas: 100% (235/235), done.
+
+$ cd tcpbase/esp32_fw
+tcpbase/esp32_fw$ . ~/workspace/esp32/esp-idf-v4.4/export.sh
+Setting IDF_PATH to 'workspace/esp32/esp-idf-v4.4'
+Detecting the Python interpreter
+Checking "python" ...
+Checking "python3" ...
+...
+Done! You can now compile ESP-IDF projects.
+Go to the project directory and run:
+
+  idf.py build
+
+tcpbase/esp32_fw$ idf.py set-target esp32s2
+Adding "set-target"'s dependency "fullclean" to list of commands with default set of options.
+Executing action: fullclean
+...
+-- Configuring done
+-- Generating done
+-- Build files have been written to: rover/esp32_fw/build
+
+tcpbase/esp32_fw$ idf.py menuconfig
+[O/Load] esp32_fw/sdkconfig.default 
+-> RTK1010 Node Config -> WIFI Settings -> fill Hostname=tcpbase, SSID, PASSWORD
+-> RTK1010 Node Config -> Console -> "[*] Enable UDP Console"
+-> RTK1010 Node Config -> Console -> UDP Console Host = IP of your linux development host
+-> RTK1010 Node Config -> Console Settings -> UDP Console Port = 42001
+-> RTK1010 Node Config -> Node Variant (Base RTCM TCP Server)
+=> EXIT + SAVE
+  
+tcpbase/esp32_fw$ idf.py build
+...
+Done
+tcpbase/esp32_fw$ idf.py dfu
+=> connect board with BOOT0 jumper
+tcpbase/esp32_fw$ idf.py dfu-flash
+remove BOOT0 jumper and restart
+tcpbase/esp32_fw$ ping tcpbase
+
+=> Console
+$ nc -k -l -u 42001
+
+=> Remote Update
+curl tcpbase:8032 --data-binary @- < build/rtknode.bin
+```
+## TCP RTK Rover
+```sh
+$ git clone https://github.com/MS71/RTK1010Board.git tcprover
+Cloning into 'tcprover'...
+remote: Enumerating objects: 486, done.
+remote: Counting objects: 100% (122/122), done.
+remote: Compressing objects: 100% (50/50), done.
+remote: Total 486 (delta 97), reused 88 (delta 72), pack-reused 364
+Receiving objects: 100% (486/486), 25.11 MiB | 18.16 MiB/s, done.
+Resolving deltas: 100% (235/235), done.
+
+$ cd tcprover/esp32_fw
+tcpbase/esp32_fw$ . ~/workspace/esp32/esp-idf-v4.4/export.sh
+Setting IDF_PATH to 'workspace/esp32/esp-idf-v4.4'
+Detecting the Python interpreter
+Checking "python" ...
+Checking "python3" ...
+...
+Done! You can now compile ESP-IDF projects.
+Go to the project directory and run:
+
+  idf.py build
+
+tcprover/esp32_fw$ idf.py set-target esp32s2
+Adding "set-target"'s dependency "fullclean" to list of commands with default set of options.
+Executing action: fullclean
+...
+-- Configuring done
+-- Generating done
+-- Build files have been written to: tcprover/esp32_fw/build
+
+tcprover/esp32_fw$ idf.py menuconfig
+[O/Load] esp32_fw/sdkconfig.default 
+-> RTK1010 Node Config -> WIFI Settings -> fill Hostname=tcprover, SSID, PASSWORD
+-> RTK1010 Node Config -> Console -> "[*] Enable UDP Console"
+-> RTK1010 Node Config -> Console -> UDP Console Host = IP of your linux development host
+-> RTK1010 Node Config -> Console Settings -> UDP Console Port = 42002
+-> RTK1010 Node Config -> Node Variant (Base RTCM TCP Client)
+-> RTK1010 Node Config → RTCM Client Settings -> RTCM Host = tcpbase ip
+=> EXIT + SAVE
+  
+tcprover/esp32_fw$ idf.py build
+...
+Done
+tcprover/esp32_fw$ idf.py dfu
+=> connect board with BOOT0 jumper
+tcprover/esp32_fw$ idf.py dfu-flash
+remove BOOT0 jumper and restart
+tcprover/esp32_fw$ ping tcprover
+
+=> Console
+$ nc -k -l -u 42002
+
+=> Remote Update
+curl tcprover:8032 --data-binary @- < build/rtknode.bin
+```
