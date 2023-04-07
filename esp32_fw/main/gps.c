@@ -1089,8 +1089,9 @@ static void gps_handle_nmea(int buflen, const char* buf)
                 linebuf[linebuf_used++] = '\r';
                 linebuf[linebuf_used++] = '\n';
                 linebuf[linebuf_used] = 0;
-                if(linebuf_used > 4 && (strstr(linebuf, "$PAIR001,004") == &linebuf[0]))
+                if(gps_md.uart.initflag != 0 && linebuf_used > 4 && (strstr(linebuf, "$PAIR001,004") == &linebuf[0]))
                 { // WARM START
+                    gps_md.uart.initflag = 0;
                     linebuf[linebuf_used - 2] = 0;
                     linebuf[linebuf_used - 1] = 0;
                     ESP_LOGE(TAG, "RX.RTK-1010: {%s} !!! RESTART !!! init sequence ...", linebuf);
@@ -1104,8 +1105,8 @@ static void gps_handle_nmea(int buflen, const char* buf)
                     // https://dominoc925-pages.appspot.com/mapplets/cs_ecef.html
                     //gps_nmea_send("$PLSC,SETBASEXYZ,3856.062,690.010,5016.542*");
                     gps_nmea_send("$PLSC,SETBASEXYZ,3856.065,689.998,5016.541*");                    
-                    gps_nmea_send("$PAIR436,1*");    // enable RTCM satellite ephemeris output
                     gps_nmea_send("$PLSC,MCBASE,1*"); // Set up the board as a RTCM caster
+                    //gps_nmea_send("$PAIR436,1*");    // enable RTCM satellite ephemeris output
                     //gps_nmea_send("$PLSC,NMEA,0*");  // Set up the board as a RTCM caster
                     //gps_nmea_send("$PLSC,RRTCM,1*"); // Set up the board as a RTCM caster
 #endif
