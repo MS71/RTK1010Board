@@ -139,6 +139,10 @@ config RTCM_PORT
 	int "RTCM Port"
 	default 2101
 
+config RTCM_SERVER_BASEXYZ
+	string "Base XYZ e.g: 028442.081,4923062.884,2687870.875"
+	default ""
+
 endmenu
 
 endif

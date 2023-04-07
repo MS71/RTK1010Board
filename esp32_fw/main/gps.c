@@ -878,7 +878,9 @@ static void gps_rtcmtcpserv_handle()
                     setsockopt(gps_md.rtcmtcpserv.client_sock, IPPROTO_TCP, TCP_KEEPINTVL, &keepInterval, sizeof(int));
                     setsockopt(gps_md.rtcmtcpserv.client_sock, IPPROTO_TCP, TCP_KEEPCNT, &keepCount, sizeof(int));
                     setsockopt(gps_md.rtcmtcpserv.client_sock, IPPROTO_TCP, TCP_NODELAY, (int[]) { 1 }, sizeof(int));
-
+                    // send ok msg
+                    const char ok[] = "\r\nICY 200 OK\r\n";
+                    send(gps_md.rtcmtcpserv.client_sock, &ok, strlen(ok), 0);
                     ESP_LOGI(TAG, "gps_rtcmtcpserv_handle ... connected");
                 }
             }
@@ -1025,7 +1027,6 @@ static void gps_tcpserv_handle()
                     setsockopt(gps_md.tcpserv.client_sock, IPPROTO_TCP, TCP_KEEPINTVL, &keepInterval, sizeof(int));
                     setsockopt(gps_md.tcpserv.client_sock, IPPROTO_TCP, TCP_KEEPCNT, &keepCount, sizeof(int));
                     setsockopt(gps_md.tcpserv.client_sock, IPPROTO_TCP, TCP_NODELAY, (int[]) { 1 }, sizeof(int));
-
                     ESP_LOGI(TAG, "gps_tcpserv_handle ... connected");
                 }
             }
@@ -1089,9 +1090,9 @@ static void gps_handle_nmea(int buflen, const char* buf)
                 linebuf[linebuf_used++] = '\r';
                 linebuf[linebuf_used++] = '\n';
                 linebuf[linebuf_used] = 0;
-                if(gps_md.uart.initflag != 0 && linebuf_used > 4 && (strstr(linebuf, "$PAIR001,004") == &linebuf[0]))
+                if(gps_md.uart.initflag == 2 && linebuf_used > 4 && (strstr(linebuf, "$PAIR001,004") == &linebuf[0]))
                 { // WARM START
-                    gps_md.uart.initflag = 0;
+                    gps_md.uart.initflag = 3;
                     linebuf[linebuf_used - 2] = 0;
                     linebuf[linebuf_used - 1] = 0;
                     ESP_LOGE(TAG, "RX.RTK-1010: {%s} !!! RESTART !!! init sequence ...", linebuf);
@@ -1103,12 +1104,15 @@ static void gps_handle_nmea(int buflen, const char* buf)
                     //gps_nmea_send("$PLSC,SETBASEXYZ,3856.062429080888,690.0109524095845,5016.542125862716*");
 #elif defined(CONFIG_RTK1010_NODE_BASE_RTCM_SERVER)
                     // https://dominoc925-pages.appspot.com/mapplets/cs_ecef.html
-                    //gps_nmea_send("$PLSC,SETBASEXYZ,3856.062,690.010,5016.542*");
-                    gps_nmea_send("$PLSC,SETBASEXYZ,3856.065,689.998,5016.541*");                    
+#ifdef CONFIG_RTCM_SERVER_BASEXYZ
+                    if(strlen(CONFIG_RTCM_SERVER_BASEXYZ) != 0)
+                    {
+                        ESP_LOGW(TAG, "RX.RTK-1010: SETBASEXYZ %s", CONFIG_RTCM_SERVER_BASEXYZ);
+                        gps_nmea_send("$PLSC,SETBASEXYZ," CONFIG_RTCM_SERVER_BASEXYZ "*");                    
+                    }
+#endif
+                    gps_nmea_send("$PAIR436,1*");    // enable RTCM satellite ephemeris output
                     gps_nmea_send("$PLSC,MCBASE,1*"); // Set up the board as a RTCM caster
-                    //gps_nmea_send("$PAIR436,1*");    // enable RTCM satellite ephemeris output
-                    //gps_nmea_send("$PLSC,NMEA,0*");  // Set up the board as a RTCM caster
-                    //gps_nmea_send("$PLSC,RRTCM,1*"); // Set up the board as a RTCM caster
 #endif
                 }
                 else if(linebuf_used > 4 && (strstr(linebuf, "$P") == &linebuf[0]))
@@ -1226,7 +1230,7 @@ static void gps_uart_handle()
             if(gps_md.uart.initflag == 1)
             {
                 ESP_LOGE(TAG, "GPS INIT");
-                gps_md.uart.initflag = 0;
+                gps_md.uart.initflag = 2;
                 gps_nmea_send("$PAIR004*"); // Hot Start ...
             }
 
