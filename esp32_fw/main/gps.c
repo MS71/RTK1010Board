@@ -1164,7 +1164,7 @@ static void gps_handle_nmea(int buflen, const char* buf)
                             double ecef[3] = {0};
                             lla[0] = ddmmtodd(gps_nmea_get_float(linebuf, 2));
                             lla[1] = ddmmtodd(gps_nmea_get_float(linebuf, 4));
-                            lla[2] = ddmmtodd(gps_nmea_get_float(linebuf, 9));
+                            lla[2] = gps_nmea_get_float(linebuf, 9);
                             lla2ecef(lla,ecef);
 
                             gps_md.ntrip.gga_print_timeout = esp_timer_get_time() + 3000000;
