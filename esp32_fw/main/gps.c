@@ -1118,7 +1118,7 @@ static void gps_handle_nmea(int buflen, const char* buf)
                 linebuf[linebuf_used++] = '\n';
                 linebuf[linebuf_used] = 0;
                     //ESP_LOGE(TAG, "RX.RTK-1010: gps_md.uart.initflag=%d", gps_md.uart.initflag);
-                if(gps_md.uart.initflag == 2 && linebuf_used > 4 && (strstr(linebuf, "$PAIR001,004") == &linebuf[0]) )
+                if(gps_md.uart.initflag == 2 && linebuf_used > 4 && (strstr(linebuf, "$PAIR00") == &linebuf[0]) )
                 { // WARM START
                     gps_md.uart.initflag = 3;
                     linebuf[linebuf_used - 2] = 0;
@@ -1248,10 +1248,10 @@ static void gps_uart_start()
         uart_set_line_inverse(UART_NUM_1, UART_SIGNAL_TXD_INV | UART_SIGNAL_RXD_INV);
 #endif
 
-        usleep(100000);
-        ESP_LOGI(TAG, "gps_uart_start release RTK-1010");
+        usleep(50000);
         gpio_set_level((gpio_num_t)4, 1); // release the RTK-1010 from reset
-        usleep(1000000);
+        usleep(200000);
+        ESP_LOGI(TAG, "gps_uart_start RTK-1010 EN released");
 
         uart_flush(UART_NUM_1);
         gps_md.uart.initflag = 1;
