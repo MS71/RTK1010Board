@@ -1224,6 +1224,11 @@ static void gps_uart_start()
 
         memset((void*)&gps_md.uart, 0, sizeof(gps_md.uart));
 
+        usleep(100000);
+        gpio_set_level((gpio_num_t)4, 1); // release the RTK-1010 from reset
+        usleep(1000000);
+        ESP_LOGI(TAG, "gps_uart_start RTK-1010 EN released");
+
         /* Configure parameters of an UART driver,
          * communication pins and install the driver */
         uart_config_t uart_config = {
@@ -1247,12 +1252,6 @@ static void gps_uart_start()
 #ifdef GPS_UART1_INV
         uart_set_line_inverse(UART_NUM_1, UART_SIGNAL_TXD_INV | UART_SIGNAL_RXD_INV);
 #endif
-
-        usleep(50000);
-        gpio_set_level((gpio_num_t)4, 1); // release the RTK-1010 from reset
-        usleep(200000);
-        ESP_LOGI(TAG, "gps_uart_start RTK-1010 EN released");
-
         uart_flush(UART_NUM_1);
         gps_md.uart.initflag = 1;
     }
