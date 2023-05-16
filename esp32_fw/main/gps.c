@@ -33,7 +33,7 @@
 #include "lwip/sys.h"
 #include <lwip/netdb.h>
 
-#if defined(CONFIG_RTK1010_NODE_PASS_TO_CDC)
+#if defined(CONFIG_RTK1010_NODE_CDC_ADAPTER) || defined(CONFIG_RTK1010_NODE_PASS_TO_CDC)
 #include "tinyusb.h"
 #include "tusb_cdc_acm.h"
 #endif
@@ -1302,7 +1302,7 @@ static void gps_uart_handle()
                 // fflush(gps_md.tcpserv.client_sock);
             }
 #endif
-#ifdef CONFIG_RTK1010_NODE_PASS_TO_CDC
+#if defined(CONFIG_RTK1010_NODE_CDC_ADAPTER) || defined(CONFIG_RTK1010_NODE_PASS_TO_CDC)
             tinyusb_cdcacm_write_queue(TINYUSB_CDC_ACM_0, gps_rx_buffer, len);
             tinyusb_cdcacm_write_flush(TINYUSB_CDC_ACM_0, 0);
 #endif
@@ -1375,6 +1375,30 @@ static void gps_task(void* pvParameters)
         vTaskDelete(NULL);
     }
 }
+
+#if defined(CONFIG_RTK1010_NODE_CDC_ADAPTER) || defined(CONFIG_RTK1010_NODE_PASS_TO_CDC)
+void tinyusb_cdc_rx_callback(int itf, cdcacm_event_t *event)
+{
+    static uint8_t buf[CONFIG_TINYUSB_CDC_RX_BUFSIZE + 1];
+    /* initialization */
+    size_t rx_size = 0;
+
+    /* read */
+    esp_err_t ret = tinyusb_cdcacm_read(itf, buf, CONFIG_TINYUSB_CDC_RX_BUFSIZE, &rx_size);
+    if(ret == ESP_OK)
+    {
+        uart_write_bytes(UART_NUM_1, (const char*)buf, rx_size);
+        gps_md.uart.tx_bytes += rx_size;
+    }
+}
+
+void tinyusb_cdc_line_state_changed_callback(int itf, cdcacm_event_t *event)
+{
+    int dtr = event->line_state_changed_data.dtr;
+    int rts = event->line_state_changed_data.rts;
+    ESP_LOGI(TAG, "Line state changed on channel %d: DTR:%d, RTS:%d", itf, dtr, rts);
+}
+#endif
 
 /**
  * @brief
