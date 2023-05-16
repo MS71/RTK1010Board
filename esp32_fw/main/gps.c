@@ -33,6 +33,11 @@
 #include "lwip/sys.h"
 #include <lwip/netdb.h>
 
+#if defined(CONFIG_RTK1010_NODE_PASS_TO_CDC)
+#include "tinyusb.h"
+#include "tusb_cdc_acm.h"
+#endif
+
 static const char* TAG = "gps";
 
 extern EventGroupHandle_t wifi_event_group;
@@ -191,6 +196,10 @@ void rtcm_message_filter(uint32_t rtcm_type, uint16_t rtcm_bytes, uint8_t* rtcm_
     if(rtcm_bytes >= 8)
     {
 #if 0
+        if((rtcm_type == 1005) || (rtcm_type == 1074) || (rtcm_type == 1084) || (rtcm_type == 1094) ||
+            (rtcm_type == 1114) || (rtcm_type == 1124))
+#endif
+#if 1
         if((rtcm_type == 1005) || (rtcm_type == 1074) || (rtcm_type == 1084) || (rtcm_type == 1094) ||
             (rtcm_type == 1114) || (rtcm_type == 1124))
 #endif
@@ -772,9 +781,12 @@ static void gps_rtcmtcpclient_handle()
             // ESP_LOGE(TAG,"gps_rtcmtcpclient_handle TX.GPS:%s",gps_tx_buffer);
             if(uart_is_driver_installed(UART_NUM_1))
             {
-                // uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, len);
-                // gps_md.uart.tx_bytes += len;
+#if 0                
+                uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, len);
+                gps_md.uart.tx_bytes += len;
+#else                
                 rtcm_message_parser(&gps_logger[0], len, (uint8_t*)gps_tx_buffer);
+#endif
 
                 gps_md.ntrip.ntrip_rx_bytes += len;
             }
@@ -1126,7 +1138,7 @@ static void gps_handle_nmea(int buflen, const char* buf)
                     ESP_LOGE(TAG, "RX.RTK-1010: {%s} !!! RESTART !!! init sequence ...", linebuf);
                     gps_nmea_send("$PLSC,VER*"); // request firmware version
 #if defined(CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT) || defined(CONFIG_RTK1010_NODE_ROVER_RTCM_CLIENT)
-                    gps_nmea_send("$PLSC,FIXRATE,10*"); // Set fixrate to 10Hz
+                    //gps_nmea_send("$PLSC,FIXRATE,10*"); // Set fixrate to 10Hz
                     //gps_nmea_send("$PLSC,MCBASE,0*"); // Set up the board as a rover(default)
                     // gps_nmea_send("$PAIR050,100*"); // Set position fix intervall to 10Hz
                     // gps_nmea_send("$PLSC,SETBASEXYZ,3856.062429080888,690.0109524095845,5016.542125862716*");
@@ -1290,6 +1302,10 @@ static void gps_uart_handle()
                 // fflush(gps_md.tcpserv.client_sock);
             }
 #endif
+#ifdef CONFIG_RTK1010_NODE_PASS_TO_CDC
+            tinyusb_cdcacm_write_queue(TINYUSB_CDC_ACM_0, gps_rx_buffer, len);
+            tinyusb_cdcacm_write_flush(TINYUSB_CDC_ACM_0, 0);
+#endif
             gps_rx_buffer[len] = 0;
             // ESP_LOGW(TAG, "tx %d %s", len, gps_rx_buffer);
             gps_handle_nmea(len, (const char*)gps_rx_buffer);
@@ -1304,6 +1320,7 @@ static void gps_uart_handle()
 static void gps_task(void* pvParameters)
 {
     (void)pvParameters;
+    usleep(1000000);
     ESP_LOGI(TAG, "gps_task TXD=%d RXD=%d", GPS_UART1_TXD, GPS_UART1_RXD);
 
     while(true)

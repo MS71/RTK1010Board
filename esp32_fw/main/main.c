@@ -12,9 +12,15 @@
 #include "esp_system.h"
 #include "nvs_flash.h"
 #include "esp_netif.h"
+#if defined(CONFIG_RTK1010_NODE_CDC_ADAPTER) || defined(CONFIG_RTK1010_NODE_PASS_TO_CDC)
+#include "tinyusb.h"
+#include "tusb_cdc_acm.h"
+#endif
+#ifdef RTK1010_NODE_CONSOLE_USB_ACM
 #include "tinyusb.h"
 #include "tusb_cdc_acm.h"
 #include "tusb_console.h"
+#endif
 //#include "gps.h"
 
 #include "lwip/err.h"
@@ -106,6 +112,39 @@ int con_udp_log(const char* format, va_list args)
 #error not implemented yet
 #endif
 
+#ifdef CONFIG_RTK1010_NODE_PASS_TO_CDC
+void tinyusb_cdc_rx_callback(int itf, cdcacm_event_t *event)
+{
+#if 0
+    static uint8_t buf[CONFIG_TINYUSB_CDC_RX_BUFSIZE + 1];
+    /* initialization */
+    size_t rx_size = 0;
+
+    /* read */
+    esp_err_t ret = tinyusb_cdcacm_read(itf, buf, CONFIG_TINYUSB_CDC_RX_BUFSIZE, &rx_size);
+    if (ret == ESP_OK) {
+        ESP_LOGI(TAG, "Data from channel %d:", itf);
+        ESP_LOG_BUFFER_HEXDUMP(TAG, buf, rx_size, ESP_LOG_INFO);
+    } else {
+        ESP_LOGE(TAG, "Read error");
+    }
+
+    /* write back */
+    tinyusb_cdcacm_write_queue(itf, buf, rx_size);
+    tinyusb_cdcacm_write_queue(itf, buf, rx_size);
+    tinyusb_cdcacm_write_queue(itf, buf, rx_size);
+    tinyusb_cdcacm_write_flush(itf, 0);
+#endif
+}
+
+void tinyusb_cdc_line_state_changed_callback(int itf, cdcacm_event_t *event)
+{
+    int dtr = event->line_state_changed_data.dtr;
+    int rts = event->line_state_changed_data.rts;
+    ESP_LOGI(TAG, "Line state changed on channel %d: DTR:%d, RTS:%d", itf, dtr, rts);
+}
+#endif
+
 /**
  * @brief 
  */
@@ -121,6 +160,28 @@ void app_main(void)
     tinyusb_config_cdcacm_t amc_cfg = { 0 }; // the configuration uses default values
     ESP_ERROR_CHECK(tusb_cdc_acm_init(&amc_cfg));
     esp_tusb_init_console(TINYUSB_CDC_ACM_0); // log to usb
+#endif
+
+#ifdef CONFIG_RTK1010_NODE_PASS_TO_CDC
+    /* enable CDC
+     */
+    const tinyusb_config_t tusb_cfg = {
+        .external_phy = false,
+    };
+    ESP_ERROR_CHECK(tinyusb_driver_install(&tusb_cfg));
+
+    tinyusb_config_cdcacm_t acm_cfg = { .usb_dev = TINYUSB_USBDEV_0,
+        .cdc_port = TINYUSB_CDC_ACM_0,
+        .rx_unread_buf_sz = 64,
+        .callback_rx = &tinyusb_cdc_rx_callback, // the first way to register a callback
+        .callback_rx_wanted_char = NULL,
+        .callback_line_state_changed = NULL,
+        .callback_line_coding_changed = NULL };
+    ESP_ERROR_CHECK(tusb_cdc_acm_init(&acm_cfg));
+
+    /* the second way to register a callback */
+    ESP_ERROR_CHECK(tinyusb_cdcacm_register_callback(
+        TINYUSB_CDC_ACM_0, CDC_EVENT_LINE_STATE_CHANGED, &tinyusb_cdc_line_state_changed_callback));
 #endif
 
 #ifdef CONFIG_RTK1010_NODE_CONSOLE_OFF

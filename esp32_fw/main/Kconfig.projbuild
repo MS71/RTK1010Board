@@ -131,6 +131,16 @@ endif
 ###
 ###
 ###
+if RTK1010_NODE_ROVER_RTCM_CLIENT || RTK1010_NODE_ROVER_NTRIP_CLIENT
+
+config RTK1010_NODE_PASS_TO_CDC
+    bool "Pass corrected NMEA to CDC"
+
+endif
+
+###
+###
+###
 if RTK1010_NODE_BASE_RTCM_SERVER
 
 menu "RTCM Server Settings"
