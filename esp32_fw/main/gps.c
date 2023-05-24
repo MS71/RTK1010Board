@@ -778,17 +778,20 @@ static void gps_rtcmtcpclient_handle()
         len = recv(gps_md.rtcmtcpclient.client_sock, gps_tx_buffer, sizeof(gps_tx_buffer) - 2, MSG_DONTWAIT);
         if(len > 0)
         {
-            // ESP_LOGE(TAG,"gps_rtcmtcpclient_handle TX.GPS:%s",gps_tx_buffer);
-            if(uart_is_driver_installed(UART_NUM_1))
+            if(gps_md.uart.position_fix >= 1)
             {
+                // ESP_LOGE(TAG,"gps_rtcmtcpclient_handle TX.GPS:%s",gps_tx_buffer);
+                if(uart_is_driver_installed(UART_NUM_1))
+                {
 #if 0                
                 uart_write_bytes(UART_NUM_1, (const char*)gps_tx_buffer, len);
                 gps_md.uart.tx_bytes += len;
-#else                
-                rtcm_message_parser(&gps_logger[0], len, (uint8_t*)gps_tx_buffer);
+#else
+                    rtcm_message_parser(&gps_logger[0], len, (uint8_t*)gps_tx_buffer);
 #endif
 
-                gps_md.ntrip.ntrip_rx_bytes += len;
+                    gps_md.ntrip.ntrip_rx_bytes += len;
+                }
             }
         }
         else if(len < 0 && errno != EAGAIN)
