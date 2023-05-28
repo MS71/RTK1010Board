@@ -150,7 +150,7 @@ config RTCM_PORT
 	default 2101
 
 config RTCM_SERVER_BASEXYZ
-	string "Base XYZ e.g: 028442.081,4923062.884,2687870.875"
+	string "Base XYZ e.g: 028442.081,4923062.884,2687870.875 or empty for auto ref position"
 	default ""
 
 endmenu

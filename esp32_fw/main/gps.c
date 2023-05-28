@@ -72,6 +72,7 @@ struct
         uint tx_bytes;
         uint rx_errors;
         int position_fix;
+        int base_auto_refpos_mode;
     } uart;
     struct
     {
@@ -132,7 +133,7 @@ typedef struct
     } state;
     uint16_t rtcm_len;
 } GPSLoggerType;
-GPSLoggerType gps_logger[1] = {};
+GPSLoggerType gps_logger[2] = {};
 
 double A = 6378137.0, B = 6356752.3142;
 
@@ -153,7 +154,7 @@ void lla2ecef(double* lla, double* ecef)
     return;
 }
 
-double ddmmtodd(double ddm) 
+double ddmmtodd(double ddm)
 {
     double deg = floor(ddm / 100);
     double min = ddm - deg * 100;
@@ -196,19 +197,33 @@ void rtcm_message_filter(uint32_t rtcm_type, uint16_t rtcm_bytes, uint8_t* rtcm_
     if(rtcm_bytes >= 8)
     {
 #if 0
+        if( rtcm_type == 1005 && rtcm_bytes == 25 )
+        {
+            //https://www.researchgate.net/figure/Structure-of-RTCM-message-type-1005-1006_tbl1_324936145
+            
+            ESP_LOGW(TAG, "rtcm_filter() RTCM type=%d [%d] %02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", rtcm_type, 
+                rtcm_bytes,
+                rtcm_msg[0],rtcm_msg[1], rtcm_msg[2], rtcm_msg[3], 
+                rtcm_msg[4],rtcm_msg[5], rtcm_msg[6], rtcm_msg[7], 
+                rtcm_msg[8],rtcm_msg[9], rtcm_msg[10], rtcm_msg[11], 
+                rtcm_msg[12],rtcm_msg[13], rtcm_msg[14], rtcm_msg[15], 
+                rtcm_msg[16],rtcm_msg[17], rtcm_msg[18], rtcm_msg[19], 
+                rtcm_msg[20],rtcm_msg[21], rtcm_msg[22], rtcm_msg[23], 
+                rtcm_msg[24]);
+        }
+#endif
+#if 0
         if((rtcm_type == 1005) || (rtcm_type == 1074) || (rtcm_type == 1084) || (rtcm_type == 1094) ||
             (rtcm_type == 1114) || (rtcm_type == 1124))
 #endif
-#if 1
+#if 0
         if((rtcm_type == 1005) || (rtcm_type == 1074) || (rtcm_type == 1084) || (rtcm_type == 1094) ||
             (rtcm_type == 1114) || (rtcm_type == 1124))
 #endif
         {
 #if 0
-            ESP_LOGW(TAG, "rtcm_filter() RTCM type=%d %02x%02x%02x%02x%02x...%02x%02x", 
-            rtcm_type,
-            rtcm_msg[0],rtcm_msg[1],rtcm_msg[2],rtcm_msg[3],rtcm_msg[4],
-            rtcm_msg[rtcm_bytes-2],rtcm_msg[rtcm_bytes-1]);
+            ESP_LOGW(TAG, "rtcm_filter() RTCM type=%d %02x%02x%02x%02x%02x...%02x%02x", rtcm_type, rtcm_msg[0],
+                rtcm_msg[1], rtcm_msg[2], rtcm_msg[3], rtcm_msg[4], rtcm_msg[rtcm_bytes - 2], rtcm_msg[rtcm_bytes - 1]);
 #endif
             uart_write_bytes(UART_NUM_1, (const char*)rtcm_msg, rtcm_bytes);
             gps_md.uart.tx_bytes += rtcm_bytes;
@@ -1132,8 +1147,8 @@ static void gps_handle_nmea(int buflen, const char* buf)
                 linebuf[linebuf_used++] = '\r';
                 linebuf[linebuf_used++] = '\n';
                 linebuf[linebuf_used] = 0;
-                    //ESP_LOGE(TAG, "RX.RTK-1010: gps_md.uart.initflag=%d", gps_md.uart.initflag);
-                if(gps_md.uart.initflag == 2 && linebuf_used > 4 && (strstr(linebuf, "$PAIR00") == &linebuf[0]) )
+                // ESP_LOGE(TAG, "RX.RTK-1010: gps_md.uart.initflag=%d", gps_md.uart.initflag);
+                if(gps_md.uart.initflag == 2 && linebuf_used > 4 && (strstr(linebuf, "$PAIR00") == &linebuf[0]))
                 { // WARM START
                     gps_md.uart.initflag = 3;
                     linebuf[linebuf_used - 2] = 0;
@@ -1142,9 +1157,10 @@ static void gps_handle_nmea(int buflen, const char* buf)
                     gps_nmea_send("$PLSC,VER*"); // request firmware version
 #if defined(CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT) || defined(CONFIG_RTK1010_NODE_ROVER_RTCM_CLIENT)
                     //gps_nmea_send("$PLSC,FIXRATE,10*"); // Set fixrate to 10Hz
-                    //gps_nmea_send("$PLSC,MCBASE,0*"); // Set up the board as a rover(default)
+                    // gps_nmea_send("$PLSC,MCBASE,0*"); // Set up the board as a rover(default)
                     // gps_nmea_send("$PAIR050,100*"); // Set position fix intervall to 10Hz
-                    // gps_nmea_send("$PLSC,SETBASEXYZ,3856.062429080888,690.0109524095845,5016.542125862716*");
+                    // gps_nmea_send("$PLSC,SETBASEXYZ,3856.062429080888,690.0109524095845,5016
+                    .542125862716 * ");
 #elif defined(CONFIG_RTK1010_NODE_BASE_RTCM_SERVER)
                     // https://dominoc925-pages.appspot.com/mapplets/cs_ecef.html
 #ifdef CONFIG_RTCM_SERVER_BASEXYZ
@@ -1152,10 +1168,23 @@ static void gps_handle_nmea(int buflen, const char* buf)
                     {
                         ESP_LOGW(TAG, "RX.RTK-1010: SETBASEXYZ %s", CONFIG_RTCM_SERVER_BASEXYZ);
                         gps_nmea_send("$PLSC,SETBASEXYZ," CONFIG_RTCM_SERVER_BASEXYZ "*");
+                        gps_md.uart.base_auto_refpos_mode = 0;
+                    }
+                    else
+                    {
+                        gps_md.uart.base_auto_refpos_mode = 1; / auto calculate ref pos ... 
                     }
 #endif
-                    gps_nmea_send("$PAIR436,1*");     // enable RTCM satellite ephemeris output
-                    gps_nmea_send("$PLSC,MCBASE,1*"); // Set up the board as a RTCM caster
+                    if(gps_md.uart.base_auto_refpos_mode == 0)
+                    {
+                        gps_nmea_send("$PAIR436,1*");     // enable RTCM satellite ephemeris output
+                        gps_nmea_send("$PLSC,MCBASE,1*"); // Set up the board as a RTCM caster
+                    }
+                    else
+                    {
+                        ESP_LOGW(TAG, "RX.RTK-1010: start base in rover mode for calculating the res pos first");
+                        gps_nmea_send("$PLSC,MCBASE,0*"); // Set up the board as a RTCM caster
+                    }
 #endif
                 }
                 else if(linebuf_used > 4 && (strstr(linebuf, "$P") == &linebuf[0]))
@@ -1175,22 +1204,37 @@ static void gps_handle_nmea(int buflen, const char* buf)
                         gps_md.uart.position_fix = gps_nmea_get_int(linebuf, 6, 0);
                         if(gps_md.ntrip.gga_print_timeout < esp_timer_get_time())
                         {
-                            double lla[3] = {0};
-                            double ecef[3] = {0};
+                            double lla[3] = { 0 };
+                            double ecef[3] = {};
                             lla[0] = ddmmtodd(gps_nmea_get_float(linebuf, 2));
                             lla[1] = ddmmtodd(gps_nmea_get_float(linebuf, 4));
                             lla[2] = gps_nmea_get_float(linebuf, 9);
-                            lla2ecef(lla,ecef);
+                            lla2ecef(lla, ecef);
 
                             gps_md.ntrip.gga_print_timeout = esp_timer_get_time() + 3000000;
                             ESP_LOGW(TAG,
-                                "GPS: ok: fix=%d sat=%d LLA: %.6f %.6f %.6f ECEF(m): %.6f %.6f %.6f UART: ntrip-rx=%d uart-tx=%d uart-rx=%d gps-errors=%d",
+                                "GPS: ok: fix=%d sat=%d LLA: %.6f %.6f %.6f ECEF(m): %.6f %.6f %.6f UART: ntrip-rx=%d "
+                                "uart-tx=%d uart-rx=%d gps-errors=%d",
                                 gps_md.uart.position_fix, gps_nmea_get_int(linebuf, 7, 0),
                                 gps_nmea_get_float(linebuf, 2), gps_nmea_get_float(linebuf, 4),
-                                gps_nmea_get_float(linebuf, 9), 
-                                ecef[0],ecef[1],ecef[2],
-                                gps_md.ntrip.ntrip_rx_bytes, gps_md.uart.tx_bytes,
-                                gps_md.uart.rx_bytes, gps_md.uart.rx_errors);
+                                gps_nmea_get_float(linebuf, 9), ecef[0], ecef[1], ecef[2], gps_md.ntrip.ntrip_rx_bytes,
+                                gps_md.uart.tx_bytes, gps_md.uart.rx_bytes, gps_md.uart.rx_errors);
+
+#if defined(CONFIG_RTK1010_NODE_BASE_RTCM_SERVER)
+                            if(gps_md.uart.base_auto_refpos_mode == 1)
+                            {
+                                if(gps_md.uart.position_fix > 1)
+                                {
+                                    char tmpstr[256];
+                                    sprintf(tmpstr, "$PLSC,SETBASEXYZ,%.6f,%.6f,%.6f*", ecef[0], ecef[1], ecef[2]);
+                                    gps_nmea_send(tmpstr);
+                                    ESP_LOGW(TAG, "RX.RTK-1010: switch to base station mode with calculated ECEF");
+                                    gps_md.uart.base_auto_refpos_mode = 0;
+                                    gps_nmea_send("$PAIR436,1*");     // enable RTCM satellite ephemeris output
+                                    gps_nmea_send("$PLSC,MCBASE,1*"); // Set up the board as a RTCM caster
+                                }
+                            }
+#endif
                         }
 
                         if(gps_md.uart.position_fix >= 1)
@@ -1288,8 +1332,8 @@ static void gps_uart_handle()
                 ESP_LOGE(TAG, "GPS INIT");
                 gps_md.uart.initflag = 2;
                 gps_nmea_send("$PAIR004*"); // Hot Start ...
-                //gps_nmea_send("$PAIR006*"); // Cold Start ...
-                //gps_nmea_send("$PAIR007*"); // Try this when a base is reconfigured into a rover
+                // gps_nmea_send("$PAIR006*"); // Cold Start ...
+                // gps_nmea_send("$PAIR007*"); // Try this when a base is reconfigured into a rover
             }
 
             gps_md.uart.rx_bytes += len;
@@ -1301,9 +1345,12 @@ static void gps_uart_handle()
 #ifdef CONFIG_RTK1010_NODE_BASE_RTCM_SERVER
             if(gps_md.rtcmtcpserv.client_sock != 0)
             {
-                send(gps_md.rtcmtcpserv.client_sock, gps_rx_buffer, len, 0);
-                // fflush(gps_md.tcpserv.client_sock);
+                if(gps_md.uart.base_auto_refpos_mode == 0)
+                {
+                    send(gps_md.rtcmtcpserv.client_sock, gps_rx_buffer, len, 0);
+                }
             }
+            // rtcm_message_parser(&gps_logger[1], len, (uint8_t*)gps_rx_buffer);
 #endif
 #if defined(CONFIG_RTK1010_NODE_CDC_ADAPTER) || defined(CONFIG_RTK1010_NODE_PASS_TO_CDC)
             tinyusb_cdcacm_write_queue(TINYUSB_CDC_ACM_0, gps_rx_buffer, len);
@@ -1380,7 +1427,7 @@ static void gps_task(void* pvParameters)
 }
 
 #if defined(CONFIG_RTK1010_NODE_CDC_ADAPTER) || defined(CONFIG_RTK1010_NODE_PASS_TO_CDC)
-void tinyusb_cdc_rx_callback(int itf, cdcacm_event_t *event)
+void tinyusb_cdc_rx_callback(int itf, cdcacm_event_t* event)
 {
     static uint8_t buf[CONFIG_TINYUSB_CDC_RX_BUFSIZE + 1];
     /* initialization */
@@ -1395,7 +1442,7 @@ void tinyusb_cdc_rx_callback(int itf, cdcacm_event_t *event)
     }
 }
 
-void tinyusb_cdc_line_state_changed_callback(int itf, cdcacm_event_t *event)
+void tinyusb_cdc_line_state_changed_callback(int itf, cdcacm_event_t* event)
 {
     int dtr = event->line_state_changed_data.dtr;
     int rts = event->line_state_changed_data.rts;
@@ -1413,7 +1460,7 @@ void gps_init()
     gpio_set_pull_mode(gpio, GPIO_PULLDOWN_ONLY);
     gpio_set_direction(gpio, GPIO_MODE_OUTPUT);
     gpio_set_level(gpio, 0);
-    //gpio_hold_en(gpio);
+    // gpio_hold_en(gpio);
 
 #ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
     strcpy(gps_md.ntrip.host, CONFIG_NTRIP_HOST);
