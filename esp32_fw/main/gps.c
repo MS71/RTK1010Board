@@ -1142,6 +1142,7 @@ static void gps_handle_nmea(int buflen, const char* buf)
         }
         else
         {
+            // save PAIR513
             if(linebuf_used > 1)
             {
                 linebuf[linebuf_used++] = '\r';
@@ -1156,11 +1157,9 @@ static void gps_handle_nmea(int buflen, const char* buf)
                     ESP_LOGE(TAG, "RX.RTK-1010: {%s} !!! RESTART !!! init sequence ...", linebuf);
                     gps_nmea_send("$PLSC,VER*"); // request firmware version
 #if defined(CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT) || defined(CONFIG_RTK1010_NODE_ROVER_RTCM_CLIENT)
-                    //gps_nmea_send("$PLSC,FIXRATE,10*"); // Set fixrate to 10Hz
+                    // gps_nmea_send("$PLSC,FIXRATE,10*"); // Set fixrate to 10Hz
                     // gps_nmea_send("$PLSC,MCBASE,0*"); // Set up the board as a rover(default)
                     // gps_nmea_send("$PAIR050,100*"); // Set position fix intervall to 10Hz
-                    // gps_nmea_send("$PLSC,SETBASEXYZ,3856.062429080888,690.0109524095845,5016
-                    .542125862716 * ");
 #elif defined(CONFIG_RTK1010_NODE_BASE_RTCM_SERVER)
                     // https://dominoc925-pages.appspot.com/mapplets/cs_ecef.html
 #ifdef CONFIG_RTCM_SERVER_BASEXYZ
@@ -1172,7 +1171,8 @@ static void gps_handle_nmea(int buflen, const char* buf)
                     }
                     else
                     {
-                        gps_md.uart.base_auto_refpos_mode = 1; / auto calculate ref pos ... 
+                        gps_md.uart.base_auto_refpos_mode = 1;
+                        // auto calculate ref pos...
                     }
 #endif
                     if(gps_md.uart.base_auto_refpos_mode == 0)
@@ -1201,6 +1201,13 @@ static void gps_handle_nmea(int buflen, const char* buf)
                     if(strstr(linebuf, "$GNGGA") == linebuf)
                     {
                         strcpy(linebuf_bak, linebuf);
+                        int next_fix = gps_nmea_get_int(linebuf, 6, 0);
+                        if(next_fix > gps_md.uart.position_fix)
+                        {
+                            gps_nmea_send("$PAIR513*");
+                        }
+                        gps_md.uart.position_fix = next_fix;
+
                         gps_md.uart.position_fix = gps_nmea_get_int(linebuf, 6, 0);
                         if(gps_md.ntrip.gga_print_timeout < esp_timer_get_time())
                         {
@@ -1237,7 +1244,7 @@ static void gps_handle_nmea(int buflen, const char* buf)
 #endif
                         }
 
-                        if(gps_md.uart.position_fix >= 1)
+                        if(gps_md.uart.position_fix > 1)
                         {
 #ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
                             strncpy(gps_md.ntrip.gga_line, linebuf_bak, linebuf_used);
