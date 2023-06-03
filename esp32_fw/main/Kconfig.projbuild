@@ -82,6 +82,9 @@ choice
         bool "CDC Adapter (RTK-1010 <=> USB-Serial)"
 endchoice
 
+config CUSTOM_CMD_SEQUENCE_0
+	string "Custom NMEA command sequence send before MCBASE. e.g. $PLSC,VER*|$PLSC,VER*|$PLSC,VER*"
+	default "$PLSC,VER*|$PLSC,VER*|$PLSC,VER*"
 
 ###
 ###

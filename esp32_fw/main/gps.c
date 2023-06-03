@@ -212,11 +212,7 @@ void rtcm_message_filter(uint32_t rtcm_type, uint16_t rtcm_bytes, uint8_t* rtcm_
                 rtcm_msg[24]);
         }
 #endif
-#if 0
-        if((rtcm_type == 1005) || (rtcm_type == 1074) || (rtcm_type == 1084) || (rtcm_type == 1094) ||
-            (rtcm_type == 1114) || (rtcm_type == 1124))
-#endif
-#if 0
+#if 1
         if((rtcm_type == 1005) || (rtcm_type == 1074) || (rtcm_type == 1084) || (rtcm_type == 1094) ||
             (rtcm_type == 1114) || (rtcm_type == 1124))
 #endif
@@ -1156,6 +1152,25 @@ static void gps_handle_nmea(int buflen, const char* buf)
                     linebuf[linebuf_used - 1] = 0;
                     ESP_LOGE(TAG, "RX.RTK-1010: {%s} !!! RESTART !!! init sequence ...", linebuf);
                     gps_nmea_send("$PLSC,VER*"); // request firmware version
+
+#ifdef CONFIG_CUSTOM_CMD_SEQUENCE_0
+                    // send custom command sequence #1
+                    if(strlen(CONFIG_CUSTOM_CMD_SEQUENCE_0) > 0)
+                    {
+                        char cmdseq[] = CONFIG_CUSTOM_CMD_SEQUENCE_0;
+                        char* token;
+                        char* rest = cmdseq;
+                        while((token = strtok_r(rest, "|", &rest)))
+                        {
+                            if(strlen(cmdseq) > 0)
+                            {
+                                ESP_LOGW(TAG, "RX.RTK-1010: send custom cmd: %s", token);
+                                gps_nmea_send(token);
+                            }
+                        }
+                    }
+#endif
+
 #if defined(CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT) || defined(CONFIG_RTK1010_NODE_ROVER_RTCM_CLIENT)
                     // gps_nmea_send("$PLSC,FIXRATE,10*"); // Set fixrate to 10Hz
                     // gps_nmea_send("$PLSC,MCBASE,0*"); // Set up the board as a rover(default)
@@ -1244,7 +1259,7 @@ static void gps_handle_nmea(int buflen, const char* buf)
 #endif
                         }
 
-                        if(gps_md.uart.position_fix > 1)
+                        if(gps_md.uart.position_fix >= 1)
                         {
 #ifdef CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT
                             strncpy(gps_md.ntrip.gga_line, linebuf_bak, linebuf_used);
