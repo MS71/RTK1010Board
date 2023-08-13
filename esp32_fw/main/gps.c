@@ -55,6 +55,8 @@ uint8_t powerstate();
 #define GPS_UART1_RXD 2
 #undef GPS_UART1_INV
 
+#define RTCM_THROTTLING_PERIOD 100 // in ms
+
 uint8_t gps_uart_ready = 0;
 uint8_t gps_sapos_ready = 0;
 
@@ -95,6 +97,17 @@ struct
         char gga_line[256];
 #endif
     } ntrip;
+#ifdef RTCM_THROTTLING_PERIOD
+    struct
+    {
+        int64_t ts_1005;
+        int64_t ts_1074;
+        int64_t ts_1084;
+        int64_t ts_1094;
+        int64_t ts_1114;
+        int64_t ts_1124;
+    } rtcm_throttling;
+#endif
     struct
     {
         int listen_sock;
@@ -212,10 +225,47 @@ void rtcm_message_filter(uint32_t rtcm_type, uint16_t rtcm_bytes, uint8_t* rtcm_
                 rtcm_msg[24]);
         }
 #endif
-#if 1
-        if((rtcm_type == 1005) || (rtcm_type == 1074) || (rtcm_type == 1084) || (rtcm_type == 1094) ||
-            (rtcm_type == 1114) || (rtcm_type == 1124))
+
+        uint8_t passit = 0;
+#ifdef RTCM_THROTTLING_PERIOD
+        int64_t t = esp_timer_get_time();
+        int64_t p = RTCM_THROTTLING_PERIOD * 1000;
+        
+        if((rtcm_type == 1005) && (gps_md.rtcm_throttling.ts_1005 < t))
+        {
+            gps_md.rtcm_throttling.ts_1005 = t + p;
+            passit = 1;
+        }
+        if((rtcm_type == 1074) && (gps_md.rtcm_throttling.ts_1074 < t))
+        {
+            gps_md.rtcm_throttling.ts_1074 = t + p;
+            passit = 1;
+        }
+        if((rtcm_type == 1084) && (gps_md.rtcm_throttling.ts_1084 < t))
+        {
+            gps_md.rtcm_throttling.ts_1084 = t + p;
+            passit = 1;
+        }
+        if((rtcm_type == 1094) && (gps_md.rtcm_throttling.ts_1094 < t))
+        {
+            gps_md.rtcm_throttling.ts_1094 = t + p;
+            passit = 1;
+        }
+        if((rtcm_type == 1114) && (gps_md.rtcm_throttling.ts_1114 < t))
+        {
+            gps_md.rtcm_throttling.ts_1114 = t + p;
+            passit = 1;
+        }
+        if((rtcm_type == 1124) && (gps_md.rtcm_throttling.ts_1124 < t))
+        {
+            gps_md.rtcm_throttling.ts_1124 = t + p;
+            passit = 1;
+        }
+#else
+        passit = 1;
 #endif
+        
+        if( passit == 1)
         {
 #if 0
             ESP_LOGW(TAG, "rtcm_filter() RTCM type=%d %02x%02x%02x%02x%02x...%02x%02x", rtcm_type, rtcm_msg[0],
