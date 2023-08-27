@@ -146,9 +146,10 @@ If you like to tinker more with the board you may want to populate more 0805 100
   Alternative antennas
 </h2>
 
-| Confirmed<br>Working | Antenna | U.FL/I-PEX | SMA | Source | Notes |
-| :---------------: | :-----: | :--------: | :-: | :----: | :---: |
-| ✔ | Linx ANT-GNCP-C25L15100 | ✔ | ❌ | [Mouser](https://mouser.com/ProductDetail/Linx-Technologies/ANT-GNCP-C25L15100?qs=7D1LtPJG0i2oOR5Ka99M8Q%3D%3D)<br>[DigiKey](https://digikey.com/en/products/detail/linx-technologies-inc/ANT-GNCP-C25L15100/15294130) |
-| ❓ | u-blox ANN-MB1-00 | ❌ | ✔ | [u-blox](https://www.u-blox.com/en/product/ann-mb1-antenna)<br>[Mouser](https://mouser.com/ProductDetail/u-blox/ANN-MB1-00?qs=CiayqK2gdcJPcGOJA8mMZQ%3D%3D)<br>[DigiKey](https://digikey.com/en/products/detail/u-blox/ANN-MB1-00/14835875) | |
-| ❓ | ArduSimple OEM Survey (Tri-band) | ❌ | ✔ | [ArduSimple](https://www.ardusimple.com/product/oem-survey-tripleband-gnss-antenna) | |
-| ❓ | ArduSimple Budget Survey (Tri-band) | ❌ | ✔ | [ArduSimple](https://www.ardusimple.com/product/budget-survey-tripleband-gnss-antenna-ip66) | The antenna itself has a TNC connector - includes 2,5M TNC-SMA cable  |
+| Confirmed<br>Working | Antenna | Internal / External| U.FL/I-PEX | SMA | Source | Notes |
+| :---------------: | :-----: |  :-: | :--------: | :-: | :----: | :---: |
+| ✔ | Linx ANT-GNCP-C25L15100 | I | ✔ | ❌ | [Mouser](https://mouser.com/ProductDetail/Linx-Technologies/ANT-GNCP-C25L15100?qs=7D1LtPJG0i2oOR5Ka99M8Q%3D%3D)<br>[DigiKey](https://digikey.com/en/products/detail/linx-technologies-inc/ANT-GNCP-C25L15100/15294130) |
+| ✔ | Linx ANT-GNRM-L15A | E | ❌ | ✔ | [Mouser](https://eu.mouser.com/ProductDetail/TE-Connectivity-Linx-Technologies/ANT-GNRM-L15A-3?qs=tlsG%2FOw5FFgeA7pANnaD7A%3D%3D)<br>[DigiKey](https://www.digikey.com/en/products/detail/te-connectivity-linx/ANT-GNRM-L15A-3/16740157) | Metallic ground plane recommended
+| ❓ | u-blox ANN-MB1-00 |  E | ❌ | ✔ | [u-blox](https://www.u-blox.com/en/product/ann-mb1-antenna)<br>[Mouser](https://mouser.com/ProductDetail/u-blox/ANN-MB1-00?qs=CiayqK2gdcJPcGOJA8mMZQ%3D%3D)<br>[DigiKey](https://digikey.com/en/products/detail/u-blox/ANN-MB1-00/14835875) | |
+| ❓ | ArduSimple OEM Survey (Tri-band) | I | ❌ | ✔ | [ArduSimple](https://www.ardusimple.com/product/oem-survey-tripleband-gnss-antenna) | |
+| ❓ | ArduSimple Budget Survey (Tri-band) |  E | ❌ | ✔ | [ArduSimple](https://www.ardusimple.com/product/budget-survey-tripleband-gnss-antenna-ip66) | The antenna itself has a TNC connector - includes 2,5M TNC-SMA cable  |
