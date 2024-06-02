@@ -1222,9 +1222,10 @@ static void gps_handle_nmea(int buflen, const char* buf)
 #endif
 
 #if defined(CONFIG_RTK1010_NODE_ROVER_NTRIP_CLIENT) || defined(CONFIG_RTK1010_NODE_ROVER_RTCM_CLIENT)
-                    // gps_nmea_send("$PLSC,FIXRATE,10*"); // Set fixrate to 10Hz
-                    // gps_nmea_send("$PLSC,MCBASE,0*"); // Set up the board as a rover(default)
-                    // gps_nmea_send("$PAIR050,100*"); // Set position fix intervall to 10Hz
+                    //gps_nmea_send("$PLSC,FIXRATE,10*"); // Set fixrate to 10Hz
+                    //gps_nmea_send("$PLSC,MCBASE,0*"); // Set up the board as a rover(default)
+                    gps_nmea_send("$PAIR050,100*"); // Set position fix intervall to 10Hz
+                    // gps_nmea_send("$PLSC,SETBASEXYZ,3856.062429080888,690.0109524095845,5016.542125862716*");
 #elif defined(CONFIG_RTK1010_NODE_BASE_RTCM_SERVER)
                     // https://dominoc925-pages.appspot.com/mapplets/cs_ecef.html
 #ifdef CONFIG_RTCM_SERVER_BASEXYZ
@@ -1269,7 +1270,7 @@ static void gps_handle_nmea(int buflen, const char* buf)
                         int next_fix = gps_nmea_get_int(linebuf, 6, 0);
                         if(next_fix > gps_md.uart.position_fix)
                         {
-                            gps_nmea_send("$PAIR513*");
+                            gps_nmea_send("$PAIR513*"); // Saves the current configurations to the file system.
                         }
                         gps_md.uart.position_fix = next_fix;
 
@@ -1285,9 +1286,10 @@ static void gps_handle_nmea(int buflen, const char* buf)
 
                             gps_md.ntrip.gga_print_timeout = esp_timer_get_time() + 3000000;
                             ESP_LOGW(TAG,
-                                "GPS: ok: fix=%d sat=%d LLA: %.6f %.6f %.6f ECEF(m): %.6f %.6f %.6f UART: ntrip-rx=%d "
+                                "GPS: ok: fix=%d sat=%d hdop=%.3f LLA: %.6f %.6f %.6f ECEF(m): %.6f %.6f %.6f UART: ntrip-rx=%d "
                                 "uart-tx=%d uart-rx=%d gps-errors=%d",
                                 gps_md.uart.position_fix, gps_nmea_get_int(linebuf, 7, 0),
+                                gps_nmea_get_float(linebuf, 8),
                                 gps_nmea_get_float(linebuf, 2), gps_nmea_get_float(linebuf, 4),
                                 gps_nmea_get_float(linebuf, 9), ecef[0], ecef[1], ecef[2], gps_md.ntrip.ntrip_rx_bytes,
                                 gps_md.uart.tx_bytes, gps_md.uart.rx_bytes, gps_md.uart.rx_errors);
